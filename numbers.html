@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+
+<!-- Anyone may copy and/or modify this software without restriction. -->
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<base href="">
+<link rel="stylesheet" href="http://funarg.nfshost.com/r2/css/r2.css" type="text/css">
+<title>Latin Number Exercises</title>
+<style type="text/css">
+BODY { max-width: 48em; }
+H1 { font-size: large; }
+H2 { font-size: medium; }
+DIV.nav { font-size: small; }
+.ref { font-weight: bold; }
+.targetform { font-style: italic; padding-left: 2em;}
+.hidden { display: none; }
+.correct { color: green; }
+.incorrect { color: red; }
+.plural { color: blue; }
+.control { background-color: #FBF; font-size: small;
+  border: solid thin black; }
+.control BUTTON { width: 100%; font-size: x-small; }
+TABLE.control TD { padding-right: 0.5em; }
+TR.dump TD { padding-right: 0.5em; }
+</style>
+<script type="text/javascript" src="libMacrons.js" defer></script>
+<script type="text/javascript" src="numQuiz.js" defer></script>
+</head>
+
+<body id="latin-numbers" onload="init()">
+
+<div class="nav">
+<a href="./">MIKE WILSON</a>
+&rarr; <a href="code/code.html">CODE</a>
+&rarr; <a href="code/languages/languages.html">LANGUAGES</a>
+&rarr; LATIN-NUMBERS
+&mdash; Updated September&nbsp;9, 2012
+</div>
+
+<h1>Latin Number Exercises</h1>
+
+<p>
+Latin Number exercises.
+</p>
+
+<p class="hidden">
+<span>aeiouyAEIOUY</span>
+<span id="macrons">&#x0101;&#x0113;&#x012B;&#x014D;&#x016B;&#x0233;&#x0100;&#x0112;&#x012A;&#x014C;&#x016A;&#x0232;</span>
+</p>
+
+<h2>Choose range of numbers (1-999).</h2>
+
+<table class="control">
+<tr>
+<td>Cardinal:</td>
+<td><input type="checkbox" id="cardinal" onchange="chType(this)"></td>
+<td>Ordinal:</td>
+<td><input type="checkbox" id="ordinal" onchange="chType(this)"></td>
+</tr>
+<tr>
+<td>From:</td>
+<td><input type="text" size="4" id="from" onchange="chFrom(this)"></td>
+<td>To:</td>
+<td><input type="text" size="4" id="to" onchange="chTo(this)"></td>
+</tr>
+</table>
+
+<p>
+<span class="buttons">
+<button type="button" onclick="guessNumbers()">Guess Numbers</button>
+<button type="button" onclick="show()">Show</button>
+</span>
+</p>
+
+<!-- Per HTML spec, tables can't be empty -->
+<table id="table">
+<tr class="hidden"><td></td></tr>
+</table>
+
+</body>
+</html>
