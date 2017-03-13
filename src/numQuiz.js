@@ -14,12 +14,12 @@ function compareAnswer () {
     var entered = document.getElementById("input").value;
     var msg;
     var tdr = document.getElementById("result");
-    if (macronsPrintable(answer.toLowerCase()) == entered.toLowerCase()) {
-        msg = "Correct: " + macronsPrintable(answer);
+    if (macronize(answer.toLowerCase()) == entered.toLowerCase()) {
+        msg = "Correct: " + macronize(answer);
         tdr.className = "correct";
     }
     else {
-        msg = "Incorrect: " + macronsPrintable(answer);
+        msg = "Incorrect: " + macronize(answer);
         tdr.className = "incorrect";
     }
     tdr.appendChild(document.createTextNode(msg));

@@ -50,12 +50,12 @@ function compareAnswer () {
     var entered = document.getElementById("input").value;
     var msg;
     var tdr = document.getElementById("result");
-    if (macronsPrintable(answer.toLowerCase()) == entered.toLowerCase()) {
-        msg = "Correct: " + macronsPrintable(answer);
+    if (macronize(answer.toLowerCase()) == entered.toLowerCase()) {
+        msg = "Correct: " + macronize(answer);
         tdr.className = "correct";
     }
     else {
-        msg = "Incorrect: " + macronsPrintable(answer);
+        msg = "Incorrect: " + macronize(answer);
         tdr.className = "incorrect";
     }
     tdr.appendChild(document.createTextNode(msg));
@@ -126,7 +126,7 @@ function addNewRow(word, p, n, c) {
     th.className = "ref";
     var txt = wordPresIndAct(word) + " " + wordPresIndInf(word) + " " +
         wordPresPerAct(word) + " " + wordPasPart(word);
-    var str = macronsPrintable(txt);
+    var str = macronize(txt);
     th.appendChild(document.createTextNode(str));
 
     /* Describe what we want. */
@@ -181,7 +181,7 @@ function dumpRow (word) {
     th1.colSpan = "6";
     var txt = wordPresIndAct(word) + " " + wordPresIndInf(word) + " " +
               wordPresPerAct(word) + " " + wordPasPart(word);
-    var str = macronsPrintable(txt);
+    var str = macronize(txt);
     th1.appendChild(document.createTextNode(str));
 
     /* each conjugation */
@@ -240,7 +240,7 @@ function dumpRow (word) {
                 var person = Filter["Persons"][p];
                 var td = tr.insertCell(-1);
                 var end = endings[number][person];
-                var w = macronsPrintable(stem+end);
+                var w = macronize(stem+end);
                 td.appendChild(document.createTextNode(w));
             }
         }

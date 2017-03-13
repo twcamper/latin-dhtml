@@ -10,12 +10,12 @@
 
 /*
 IMPORT: ()
-EXPORT: macrons_init, macronsPrintable, macronsComparable
+EXPORT: macrons_init, macronize, macronsComparable
 */
 
 var Macrons = new Array();
 
-function macronsPrintable (str) {
+function macronize (str) {
     /* I want to use macron characters when printing
        so replace _a, _e, etc. with macroned a, e, ....
        */

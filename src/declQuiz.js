@@ -13,7 +13,7 @@
 ? Add adjectives here?  (I don't think so.  They should be separate.)
 - dumpRow is slow and called repeatedly in dumpWords. (Not important.)
   The logic could be improved with indices, but IO is the slow part.
-  macronPrintable is a little slow.
+  macronize is a little slow.
 ? Looks like string[n] isn't allowed.  Mozilla is fine with it,
   but IE chokes.  Can't find it in the ECMA spec.  Must use .charAt(n); weird.
   */
@@ -24,7 +24,7 @@ IMPORT from nounList:
     M, F, N, MF, SP, SG, PL
 IMPORT from sets: *
 IMPORT from random: *
-IMPORT from macrons: macrons_init, macronsPrintable, macronsComparable
+IMPORT from macrons: macrons_init, macronize, macronsComparable
 */
 
 var Word, TargetSP, TargetForm;
@@ -39,6 +39,7 @@ var AllGenders = [M, F, N];
 var AllQuantities = [SG, PL];
 /* DeclensionEndings[declension type][sg/pl][nom/.../abl] */
 var DeclensionEndings = [];
+var CorrectlyAnswered = [];
 
 var ti, tf, t=0;    /* for occasional profiling */
 
@@ -116,16 +117,17 @@ function copyArray (a) {
 
 function compareAnswer () {
     /* Compute the correct answer and compare it with yours. */
-    var answer = wordDecline(Word, TargetSP, TargetForm);
+    var answer = macronize(wordDecline(Word, TargetSP, TargetForm));
     var entered = document.getElementById("input").value;
     var msg;
     var tdr = document.getElementById("result");
-    if (macronsPrintable(answer.toLowerCase()) == entered.toLowerCase()) {
-        msg = "Correct: " + macronsPrintable(answer);
+    if (answer.toLowerCase() == entered.toLowerCase()) {
+        msg = "Correct: " + answer;
         tdr.className = "correct";
+        CorrectlyAnswered.push(answer)
     }
     else {
-        msg = "Incorrect: " + macronsPrintable(answer);
+        msg = "Incorrect: " + answer;
         tdr.className = "incorrect";
     }
     tdr.appendChild(document.createTextNode(msg));
@@ -158,6 +160,7 @@ function askWord () {
             TargetSP = PL;
         }
         TargetForm = randomChoose(Filters.forms);
+        console.log(CorrectlyAnswered);
         addNewRow(Word, TargetSP, TargetForm);
         if (window.scrollBy) {    /* scroll down -- not standard */
             window.scrollBy(0,100);
@@ -182,7 +185,7 @@ function addNewRow (w, q, tf) {
     var tr = table.insertRow(-1);
     var th = tr.insertCell(-1);    /* This isn't really a TH */
     th.className = "ref";
-    var txt = macronsPrintable(wordNom(w)) + " " + macronsPrintable(wordGenEnd(w)) + " " + wordGender(w);
+    var txt = macronize(wordNom(w)) + " " + macronize(wordGenEnd(w)) + " " + wordGender(w);
     if (pluralisTantum(w))
         txt = txt + " pl";
     th.appendChild(document.createTextNode(txt));
@@ -210,7 +213,7 @@ function addNewRow (w, q, tf) {
 
 function dumpRow (word, sg, pl) {
     /* Add two (or one) rows filled with all the declensions */
-    var wordHeading = macronsPrintable(wordNom(word)) + " " + macronsPrintable(wordGenEnd(word)) + " " + wordGender(word);
+    var wordHeading = macronize(wordNom(word)) + " " + macronize(wordGenEnd(word)) + " " + wordGender(word);
     if (sg) {
         sgRow(word, wordHeading);
     }
@@ -256,7 +259,7 @@ function setRowMembers(tr, word, quantity) {
     for (var i in AllForms)
         if (setMember(Filters.forms, AllForms[i])) {
             var td = tr.insertCell(-1);
-            var inflectedWord = macronsPrintable(wordDecline(word, quantity, AllForms[i]));
+            var inflectedWord = macronize(wordDecline(word, quantity, AllForms[i]));
             td.appendChild(document.createTextNode(inflectedWord));
         }
 }

@@ -99,7 +99,7 @@ function filter () {
 }
 
 function dumpRow(table, adj) {
-    var heading = macronsPrintable(adjName(adj) + " " + adjEnds(adj));
+    var heading = macronize(adjName(adj) + " " + adjEnds(adj));
     if (adjSP(adj) == PL)
         heading += " pl";
     else if (adjSP(adj) == SG)
@@ -131,7 +131,7 @@ function dumpRow(table, adj) {
                 for (var k in Forms) {
                     var form = Forms[k];
                     var td = tr.insertCell(-1);
-                    var txt = macronsPrintable(decline(adj,gender,quantity,form));
+                    var txt = macronize(decline(adj,gender,quantity,form));
                     td.appendChild(document.createTextNode(txt));
                 }
             else
