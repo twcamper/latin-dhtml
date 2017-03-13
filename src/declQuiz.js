@@ -27,14 +27,14 @@ IMPORT from random: *
 IMPORT from macrons: macrons_init, macronize, macronsComparable
 */
 
-var Word, TargetSP, TargetForm;
+var Word, TargetSP, TargetCase;
 var Filters = [];
 var WordStructs, Words = [];
 var AllChapters = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
                    21,22,23,24,25,26,27,28,29,30,31,32,33,34,35];
 var ImplementedChapters = [];
 var AllDecls = [1,2,3,4,5,0];
-var AllForms = ["nom", "acc", "gen", "dat", "abl"];
+var AllCases = ["nom", "acc", "gen", "dat", "abl"];
 var AllGenders = [M, F, N];
 var AllQuantities = [SG, PL];
 /* DeclensionEndings[declension type][sg/pl][nom/.../abl] */
@@ -45,21 +45,21 @@ var QuizBegun = false;
 var ti, tf, t=0;    /* for occasional profiling */
 
 
-function wordEnding (word, sp, form) {
+function wordEnding (word, sp, casus) {
     /* return the declined word ending */
-    return DeclensionEndings[wordDecl(word)][sp][form];
+    return DeclensionEndings[wordDecl(word)][sp][casus];
 }
 
-function wordDecline (word, sp, form) {
+function wordDecline (word, sp, casus) {
     /* return a declined word */
     var opt = wordDeclOpt(word);
     if ((opt > 0) && (sp === SG)) {
-        if ((opt >= 1) && (form == "nom"))
+        if ((opt >= 1) && (casus == "nom"))
             return wordNom(word);
-        if ((opt == 2) && (form == "acc"))
+        if ((opt == 2) && (casus == "acc"))
             return wordNom(word);
     }
-    return wordBase(word) + wordEnding(word, sp, form);
+    return wordBase(word) + wordEnding(word, sp, casus);
 }
 
 function pluralisTantum(word) {
@@ -81,9 +81,9 @@ function fillDeclensionEndingsArray() {
         DeclensionEndings[decl] = [];
         DeclensionEndings[decl][SG] = [];
         DeclensionEndings[decl][PL] = [];
-        for (f=0 ; f<AllForms.length ; f++) {
-            DeclensionEndings[decl][SG][AllForms[f]] = sg[f];
-            DeclensionEndings[decl][PL][AllForms[f]] = pl[f];
+        for (f=0 ; f<AllCases.length ; f++) {
+            DeclensionEndings[decl][SG][AllCases[f]] = sg[f];
+            DeclensionEndings[decl][PL][AllCases[f]] = pl[f];
         }
     }
     DeclensionEndingsPrep = null;
@@ -110,9 +110,9 @@ function wordFilter (a, filters, append) {
 }
 
 function pushWordStruct(list, w, filters) {
-    for (var formIndex in filters.forms) {
+    for (var caseIndex in filters.cases) {
         for (var quantIndex in filters.quantity) {
-            var ws = {"w" : w, "q" : filters.quantity[quantIndex], "f" : filters.forms[formIndex]};
+            var ws = {"w" : w, "q" : filters.quantity[quantIndex], "c" : filters.cases[caseIndex]};
             if (!alreadyCorrect(ws)) {
                 list.push(ws);
             }
@@ -136,7 +136,7 @@ function compareAnswer (input) {
     var resultCell = input.parentNode.nextSibling;
     var answer = resultCell.id;
     var msg;
-    var wordStruct = {"w" : Word, "q" : TargetSP, "f" : TargetForm};
+    var wordStruct = {"w" : Word, "q" : TargetSP, "c" : TargetCase};
     if (answer.toLowerCase() == entered.toLowerCase()) {
         msg = "Correct: " + answer;
         resultCell.className = "result correct";
@@ -170,11 +170,11 @@ function askWord() {
         var wordStruct = WordStructs.pop();
         Word = wordStruct.w;
         TargetSP = wordStruct.q;
-        TargetForm = wordStruct.f;
+        TargetCase = wordStruct.c;
         if (pluralisTantum(Word)) {
             TargetSP = PL;
         }
-        addNewRow(Word, TargetSP, TargetForm);
+        addNewRow(Word, TargetSP, TargetCase);
     }
 }
 
@@ -188,7 +188,7 @@ function promptContinue() {
 function alreadyCorrect(ws) {
     for (var i in CorrectlyAnswered) {
         ca = CorrectlyAnswered[i];
-        if (ws.w[0] === ca.w[0] && ws.q === ca.q && ws.f === ca.f) {
+        if (ws.w[0] === ca.w[0] && ws.q === ca.q && ws.c === ca.c) {
             return true;
         }
     }
@@ -201,7 +201,7 @@ function deleteAllTableRows (id) {
         table.deleteRow(-1);
 }
 
-function addNewRow (w, q, tf) {
+function addNewRow (w, quantity, targetCase) {
     /* Show the sg nominative, sg genitive ending, and gender of the word. */
     var table = document.getElementById("quizTable");
     var tr = table.insertRow(-1);
@@ -214,13 +214,13 @@ function addNewRow (w, q, tf) {
     /* the target word form and sg/pl. */
     var tdtf = tr.insertCell(-1);
     tdtf.className = "targetform";
-    if (q == PL)
+    if (quantity == PL)
         tdtf.className += " plural";
-    tdtf.appendChild(document.createTextNode(q+" "+tf+":"));
+    tdtf.appendChild(document.createTextNode(targetCase + " " + quantity + ":"));
     /* the INPUT field */
     setNewInput(tr.insertCell(-1));
     /* The result field, where we write "Correct", etc. */
-    setNewResult(tr.insertCell(-1), macronize(wordDecline(Word, TargetSP, TargetForm)));
+    setNewResult(tr.insertCell(-1), macronize(wordDecline(w, quantity, targetCase)));
     if (window.scrollBy) {    /* scroll down -- not standard */
         window.scrollBy(0,100);
     }
@@ -296,10 +296,10 @@ function newRow() {
 }
 
 function setRowMembers(tr, word, quantity) {
-    for (var i in AllForms)
-        if (setMember(Filters.forms, AllForms[i])) {
+    for (var i in AllCases)
+        if (setMember(Filters.cases, AllCases[i])) {
             var td = tr.insertCell(-1);
-            var inflectedWord = macronize(wordDecline(word, quantity, AllForms[i]));
+            var inflectedWord = macronize(wordDecline(word, quantity, AllCases[i]));
             td.appendChild(document.createTextNode(inflectedWord));
         }
 }
@@ -322,7 +322,7 @@ function init() {
     /* set up default Filters */
     Filters.caps = [1];
     Filters.decls = copyArray(AllDecls);
-    Filters.forms = copyArray(AllForms);
+    Filters.cases = copyArray(AllCases);
     Filters.genders = copyArray(AllGenders);
     Filters.quantity = copyArray(AllQuantities);
     Filters.dirty = true;
@@ -343,8 +343,8 @@ function init() {
         document.getElementById("cap"+ImplementedChapters[i]).checked = false;
     for (i in AllDecls)
         document.getElementById("d"+AllDecls[i]).checked = false;
-    for (i in AllForms)
-        document.getElementById("f"+AllForms[i]).checked = false;
+    for (i in AllCases)
+        document.getElementById("f"+AllCases[i]).checked = false;
     for (i in AllGenders)
         document.getElementById("g"+AllGenders[i]).checked = false;
     for (i in AllQuantities)
@@ -354,8 +354,8 @@ function init() {
         document.getElementById("cap"+Filters.caps[i]).checked = true;
     for (i in Filters.decls)
         document.getElementById("d"+Filters.decls[i]).checked = true;
-    for (i in Filters.forms)
-        document.getElementById("f"+Filters.forms[i]).checked = true;
+    for (i in Filters.cases)
+        document.getElementById("f"+Filters.cases[i]).checked = true;
     for (i in Filters.genders)
         document.getElementById("g"+Filters.genders[i]).checked = true;
     for (i in Filters.quantity)
@@ -412,23 +412,23 @@ function chDecl (el, decl) {
     return true;
 }
 
-function chForm (el, form) {
+function chCase (el, casus) {
     var i = 0;
     /* one of the Form filter control checkboxes changed */
-    if (form == "all") {
-        Filters.forms = copyArray(AllForms);
-        for (i in Filters.forms)
-            document.getElementById("f"+Filters.forms[i]).checked = true;
+    if (casus == "all") {
+        Filters.cases = copyArray(AllCases);
+        for (i in Filters.cases)
+            document.getElementById("f"+Filters.cases[i]).checked = true;
     }
-    else if (form == "none") {
-        Filters.forms = [];
-        for (i in AllForms)
-            document.getElementById("f"+AllForms[i]).checked = false;
+    else if (casus == "none") {
+        Filters.cases = [];
+        for (i in AllCases)
+            document.getElementById("f"+AllCases[i]).checked = false;
     }
     else if (el.checked)
-        setAdd(Filters.forms, form);
+        setAdd(Filters.cases, casus);
     else
-        setRemove(Filters.forms, form);
+        setRemove(Filters.cases, casus);
     notifyFilters();
     return true;
 }
@@ -474,7 +474,7 @@ function askMore() {
 }
 
 function dumpWords() {
-    //console.log("caps: "+Filters.caps+" decls:"+Filters.decls+" forms:"+Filters.forms+" genders:"+Filters.genders+" quantity:"+Filters.quantity);
+    //console.log("caps: "+Filters.caps+" decls:"+Filters.decls+" cases:"+Filters.cases+" genders:"+Filters.genders+" quantity:"+Filters.quantity);
     deleteAllTableRows("quizTable");
     Words = wordFilter(OrigWords, Filters, function (list, w) { list.push(w); });
     if (Filters.quantity == [])

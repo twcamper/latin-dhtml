@@ -101,7 +101,7 @@ TR.dump TD { padding-right: 0.5em; }
         <td><button type="button" onclick="chCap(this,'none')">None</button></td>
       </tr>
       <tr>
-        <td>Decls.:</td>
+        <td>Decl.:</td>
         <td><input type="checkbox" id="d1" onchange="chDecl(this,1)">I</td>
         <td><input type="checkbox" id="d2" onchange="chDecl(this,2)">II</td>
         <td><input type="checkbox" id="d3" onchange="chDecl(this,3)">III</td>
@@ -112,21 +112,23 @@ TR.dump TD { padding-right: 0.5em; }
         <td><button type="button" onclick="chDecl(this,'none')">None</button></td>
       </tr>
       <tr>
-        <td>Forms:</td>
-        <td><input type="checkbox" id="fnom" onchange="chForm(this,'nom')">NOM</td>
-        <td><input type="checkbox" id="facc" onchange="chForm(this,'acc')">ACC</td>
-        <td><input type="checkbox" id="fgen" onchange="chForm(this,'gen')">GEN</td>
-        <td><input type="checkbox" id="fdat" onchange="chForm(this,'dat')">DAT</td>
-        <td><input type="checkbox" id="fabl" onchange="chForm(this,'abl')">ABL</td>
+        <td>Case:</td>
+        <td><input type="checkbox" id="fnom" onchange="chCase(this,'nom')">NOM</td>
+        <td><input type="checkbox" id="facc" onchange="chCase(this,'acc')">ACC</td>
+        <td><input type="checkbox" id="fgen" onchange="chCase(this,'gen')">GEN</td>
+        <td><input type="checkbox" id="fdat" onchange="chCase(this,'dat')">DAT</td>
+        <td><input type="checkbox" id="fabl" onchange="chCase(this,'abl')">ABL</td>
         <td></td>
-        <td><button type="button" onclick="chForm(this,'all')" >All</button></td>
-        <td><button type="button" onclick="chForm(this,'none')">None</button></td>
+        <td><button type="button" onclick="chCase(this,'all')" >All</button></td>
+        <td><button type="button" onclick="chCase(this,'none')">None</button></td>
       </tr>
       <tr>
         <td>Gender:</td>
         <td><input type="checkbox" id="gm" onchange="chGender(this,'m')">M</td>
         <td><input type="checkbox" id="gf" onchange="chGender(this,'f')">F</td>
         <td><input type="checkbox" id="gn" onchange="chGender(this,'n')">N</td>
+      </tr>
+      <tr>
         <td>Quantity:</td>
         <td><input type="checkbox" id="sg" onchange="chCount(this,'sg')">SG</td>
         <td><input type="checkbox" id="pl" onchange="chCount(this,'pl')">PL</td>
