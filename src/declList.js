@@ -224,7 +224,7 @@ var OrigWords = [
 ["p_oculum",    "-_i", N, "2n", 0, "p_ocul",  SP, 11],
 ["pectus",    "-oris", N, "3c", 2, "pector",  SP, 11],
 ["sanguis",   "-inis", M, "3b", 1, "sanguin", SP, 11],
-["v_ena",       "-ae", F, "1a", 0, "ven",     SP, 11],
+["v_ena",       "-ae", F, "1a", 0, "v_en",    SP, 11],
 ["venter",    "-tris", M, "3a", 1, "ventr",   SP, 11],
 ["viscera",     "-um", N, "3c", 0, "viscer",  PL, 11],
 
