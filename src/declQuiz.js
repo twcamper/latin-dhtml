@@ -29,7 +29,7 @@ IMPORT from macrons: macrons_init, macronize, macronsComparable
 
 var Word, TargetSP, TargetForm;
 var Filters = [];
-var Words = [];
+var WordStructs, Words = [];
 var AllChapters = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
                    21,22,23,24,25,26,27,28,29,30,31,32,33,34,35];
 var ImplementedChapters = [];
@@ -89,24 +89,34 @@ function fillDeclensionEndingsArray () {
     return;
 }
 
-function wordFilter (a, filters) {
+function wordFilter (a, filters, append) {
     /* remove any words not of the selected chapters and declensions */
     var b = [];
     for (var i=0 ; i<a.length ; i++) {
         var word = a[i];
-        var cap = wordCap(word);
-        var declN = +(wordDecl(word).charAt(0));
+        var chapter = wordCap(word);
+        var declensionNumber = +(wordDecl(word).charAt(0));
         var gender = wordGender(word);
-        if (setMember(filters.caps, cap))
-            if (setMember(filters.decls, declN)) {
+        if (setMember(filters.caps, chapter))
+            if (setMember(filters.decls, declensionNumber)) {
                 var genders = gender.split("");
                 if (setIntersect(filters.genders, genders))
-                    if (!(pluralisTantum(word) && !setMember(filters.quantity, PL)))
-                        b.push(word);
+                    if (!(pluralisTantum(word) && !setMember(filters.quantity, PL))) {
+                        append(b, word, filters);
+                    }
             }
     }
     return b;
 }
+
+function pushWordStruct(list, w, filters) {
+    for (var formIndex in filters.forms) {
+        for (var quantIndex in filters.quantity) {
+            list.push({"w" : w, "q" : filters.quantity[quantIndex], "f" : filters.forms[formIndex]});
+        }
+    }
+}
+
 
 function copyArray (a) {
     var b = [];
@@ -116,15 +126,19 @@ function copyArray (a) {
 }
 
 function compareAnswer () {
+    var input = document.getElementById("input");
+    if (input === null) {
+        return;
+    }
     /* Compute the correct answer and compare it with yours. */
     var answer = macronize(wordDecline(Word, TargetSP, TargetForm));
-    var entered = document.getElementById("input").value;
+    var entered = input.value;
     var msg;
     var tdr = document.getElementById("result");
     if (answer.toLowerCase() == entered.toLowerCase()) {
         msg = "Correct: " + answer;
         tdr.className = "correct";
-        CorrectlyAnswered.push(answer)
+        CorrectlyAnswered.push({"w" : Word, "q" : TargetSP, "f" : TargetForm});
     }
     else {
         msg = "Incorrect: " + answer;
@@ -150,17 +164,23 @@ function askWord () {
     if (result) {
         result.removeAttribute("id");
     }
-    if (Words.length === 0) {
-        Words = randomize(wordFilter(OrigWords, Filters));
+    if (WordStructs.length === 0) {
+        WordStructs = randomize(wordFilter(OrigWords, Filters, pushWordStruct));
     }
-    if ((Words.length > 0) && (Filters.quantity.length > 0) && (Filters.forms.length > 0)) {
-        Word = Words.pop();
-        TargetSP = randomChoose(Filters.quantity);
+    if ((WordStructs.length > 0) && (Filters.quantity.length > 0) && (Filters.forms.length > 0)) {
+        var wordStruct = WordStructs.pop();
+        while (alreadyCorrect(wordStruct)) {
+            wordStruct = WordStructs.pop();
+        }
+        if (wordStruct === undefined) {
+            return;
+        }
+        Word = wordStruct.w;
+        TargetSP = wordStruct.q;
+        TargetForm = wordStruct.f;
         if (pluralisTantum(Word)) {
             TargetSP = PL;
         }
-        TargetForm = randomChoose(Filters.forms);
-        console.log(CorrectlyAnswered);
         addNewRow(Word, TargetSP, TargetForm);
         if (window.scrollBy) {    /* scroll down -- not standard */
             window.scrollBy(0,100);
@@ -170,6 +190,19 @@ function askWord () {
         currentInput.focus();
     }
     return;
+}
+
+function alreadyCorrect(ws) {
+    if (ws) {
+        for (var i in CorrectlyAnswered) {
+            ca = CorrectlyAnswered[i];
+            if (ws.w[0] === ca.w[0] && ws.q === ca.q && ws.f === ca.f) {
+                return true;
+            }
+        }
+    }
+    return false;
+
 }
 
 function deleteAllTableRows (id) {
@@ -403,7 +436,7 @@ function chCount (el, count) {
 
 function guessWords () {
     deleteAllTableRows("table");
-    Words = randomize(wordFilter(OrigWords, Filters));
+    WordStructs = randomize(wordFilter(OrigWords, Filters, pushWordStruct));
     askWord();
     return;
 }
@@ -411,7 +444,7 @@ function guessWords () {
 function dumpWords () {
     //alert("caps: "+Filters.caps+" decls:"+Filters.decls+" forms:"+Filters.forms+" genders:"+Filters.genders+" quantity:"+Filters.quantity);
     deleteAllTableRows("table");
-    Words = wordFilter(OrigWords, Filters);
+    Words = wordFilter(OrigWords, Filters, function (list, w) { list.push(w); });
     if (Filters.quantity == [])
         return;
     else {
