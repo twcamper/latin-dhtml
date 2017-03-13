@@ -40,6 +40,7 @@ var AllQuantities = [SG, PL];
 /* DeclensionEndings[declension type][sg/pl][nom/.../abl] */
 var DeclensionEndings = [];
 var CorrectlyAnswered = [];
+var QuizBegun = false;
 
 var ti, tf, t=0;    /* for occasional profiling */
 
@@ -66,7 +67,7 @@ function pluralisTantum(word) {
     return (wordSP(word) === PL);
 }
 
-function fillDeclensionEndingsArray () {
+function fillDeclensionEndingsArray() {
     /* DeclensionEndingsPrep is a table of declension endings.
        It's in a format that's easy to read and write,
        but a format like: DeclensionEndings["2a"][SG]["acc"]
@@ -86,7 +87,6 @@ function fillDeclensionEndingsArray () {
         }
     }
     DeclensionEndingsPrep = null;
-    return;
 }
 
 function wordFilter (a, filters, append) {
@@ -112,7 +112,10 @@ function wordFilter (a, filters, append) {
 function pushWordStruct(list, w, filters) {
     for (var formIndex in filters.forms) {
         for (var quantIndex in filters.quantity) {
-            list.push({"w" : w, "q" : filters.quantity[quantIndex], "f" : filters.forms[formIndex]});
+            var ws = {"w" : w, "q" : filters.quantity[quantIndex], "f" : filters.forms[formIndex]};
+            if (!alreadyCorrect(ws)) {
+                list.push(ws);
+            }
         }
     }
 }
@@ -125,56 +128,46 @@ function copyArray (a) {
     return b;
 }
 
-function compareAnswer () {
-    var input = document.getElementById("input");
-    if (input === null) {
+function compareAnswer (input) {
+    var entered = input.value;
+    if (entered.length === 0) {
         return;
     }
-    /* Compute the correct answer and compare it with yours. */
-    var answer = macronize(wordDecline(Word, TargetSP, TargetForm));
-    var entered = input.value;
+    var resultCell = input.parentNode.nextSibling;
+    var answer = resultCell.id;
     var msg;
-    var tdr = document.getElementById("result");
+    var wordStruct = {"w" : Word, "q" : TargetSP, "f" : TargetForm};
     if (answer.toLowerCase() == entered.toLowerCase()) {
         msg = "Correct: " + answer;
-        tdr.className = "correct";
-        CorrectlyAnswered.push({"w" : Word, "q" : TargetSP, "f" : TargetForm});
+        resultCell.className = "result correct";
+        CorrectlyAnswered.push(wordStruct);
+        input.removeAttribute("onKeypress");
     }
     else {
         msg = "Incorrect: " + answer;
-        tdr.className = "incorrect";
+        resultCell.className = "result incorrect";
+        WordStructs.unshift(wordStruct);
     }
-    tdr.appendChild(document.createTextNode(msg));
-    askWord();
-    return false;
+    setResponseText(resultCell, msg);
 }
 
-function askWord () {
-    /* remove ID from previous TD; pick next word; add to table */
-    /* ID must be unique, so it must be removed from the last TD
-       before it can be included in the new TD.
-       Also remove onKeypress action from old INPUT.
-       */
-    var input = document.getElementById("input");
-    if (input) {
-        input.removeAttribute("onKeypress");
-        input.removeAttribute("id");
+function setResponseText(resultNode, msg) {
+    var oldTextNode = resultNode.childNodes[0];
+    if (oldTextNode) {
+        resultNode.removeChild(oldTextNode);
     }
-    var result = document.getElementById("result");
-    if (result) {
-        result.removeAttribute("id");
+    resultNode.appendChild(document.createTextNode(msg));
+}
+
+
+function askWord() {
+    if (Filters.dirty) {
+        applyFilter();
     }
     if (WordStructs.length === 0) {
-        WordStructs = randomize(wordFilter(OrigWords, Filters, pushWordStruct));
-    }
-    if ((WordStructs.length > 0) && (Filters.quantity.length > 0) && (Filters.forms.length > 0)) {
+        promptContinue();
+    } else {
         var wordStruct = WordStructs.pop();
-        while (alreadyCorrect(wordStruct)) {
-            wordStruct = WordStructs.pop();
-        }
-        if (wordStruct === undefined) {
-            return;
-        }
         Word = wordStruct.w;
         TargetSP = wordStruct.q;
         TargetForm = wordStruct.f;
@@ -182,39 +175,35 @@ function askWord () {
             TargetSP = PL;
         }
         addNewRow(Word, TargetSP, TargetForm);
-        if (window.scrollBy) {    /* scroll down -- not standard */
-            window.scrollBy(0,100);
-        }
-        var currentInput = document.getElementById("input");
-        currentInput.select();
-        currentInput.focus();
     }
-    return;
+}
+
+function promptContinue() {
+    var button = document.getElementById("continueButton");
+    if (QuizBegun && button) {
+        button.focus();
+    }
 }
 
 function alreadyCorrect(ws) {
-    if (ws) {
-        for (var i in CorrectlyAnswered) {
-            ca = CorrectlyAnswered[i];
-            if (ws.w[0] === ca.w[0] && ws.q === ca.q && ws.f === ca.f) {
-                return true;
-            }
+    for (var i in CorrectlyAnswered) {
+        ca = CorrectlyAnswered[i];
+        if (ws.w[0] === ca.w[0] && ws.q === ca.q && ws.f === ca.f) {
+            return true;
         }
     }
     return false;
-
 }
 
 function deleteAllTableRows (id) {
     var table = document.getElementById(id);
     while (table.rows.length !== 0)
         table.deleteRow(-1);
-    return;
 }
 
 function addNewRow (w, q, tf) {
     /* Show the sg nominative, sg genitive ending, and gender of the word. */
-    var table = document.getElementById("table");
+    var table = document.getElementById("quizTable");
     var tr = table.insertRow(-1);
     var th = tr.insertCell(-1);    /* This isn't really a TH */
     th.className = "ref";
@@ -229,19 +218,38 @@ function addNewRow (w, q, tf) {
         tdtf.className += " plural";
     tdtf.appendChild(document.createTextNode(q+" "+tf+":"));
     /* the INPUT field */
-    var tdi = tr.insertCell(-1);
+    setNewInput(tr.insertCell(-1));
+    /* The result field, where we write "Correct", etc. */
+    setNewResult(tr.insertCell(-1), macronize(wordDecline(Word, TargetSP, TargetForm)));
+    if (window.scrollBy) {    /* scroll down -- not standard */
+        window.scrollBy(0,100);
+    }
+}
+
+function setNewInput(td) {
     var input = document.createElement("input");
-    input.id = "input";
     /* avoid NS_ERROR_XPC_JS_THREW_STRING autocomplete bug */
     input.setAttribute("autocomplete", "off");
     input.setAttribute("type", "text");
     input.setAttribute("size", "20");
     input.onkeypress = checkKeypress;
-    tdi.appendChild(input);
-    /* The result field, where we write "Correct", etc. */
-    var tdr = tr.insertCell(-1);
-    tdr.id = "result";
-    return;
+    setLast(input);
+    td.appendChild(input);
+    input.select();
+    input.focus();
+}
+
+function setLast(input) {
+    var oldLast = document.getElementById("lastRow");
+    if (oldLast) {
+        oldLast.removeAttribute("id");
+    }
+    input.id = "lastRow";
+}
+
+function setNewResult(td, resultValueText) {
+    td.id = resultValueText;
+    td.className = "result";
 }
 
 function dumpRow (word, sg, pl) {
@@ -253,7 +261,6 @@ function dumpRow (word, sg, pl) {
     if (pl) {
         plRow(word, wordHeading, sg);
     }
-    return;
 }
 
 function sgRow(word, heading) {
@@ -283,7 +290,7 @@ function setHeader(tr, headingTxt) {
 }
 
 function newRow() {
-    var tr = document.getElementById("table").insertRow(-1);
+    var tr = document.getElementById("quizTable").insertRow(-1);
     tr.className = "dump";
     return tr;
 }
@@ -297,11 +304,16 @@ function setRowMembers(tr, word, quantity) {
         }
 }
 
+function notifyFilters() {
+    markFilter();
+    promptContinue();
+}
+
 /*
 Event Handlers
 */
 
-function init () {
+function init() {
     /* read the macron vowels; I don't know how to get them otherwise */
     var macronList = document.getElementById("macrons").firstChild.nodeValue;
     macrons_init(macronList);
@@ -313,6 +325,7 @@ function init () {
     Filters.forms = copyArray(AllForms);
     Filters.genders = copyArray(AllGenders);
     Filters.quantity = copyArray(AllQuantities);
+    Filters.dirty = true;
 
     var i = 0;
 
@@ -347,7 +360,6 @@ function init () {
         document.getElementById("g"+Filters.genders[i]).checked = true;
     for (i in Filters.quantity)
         document.getElementById(Filters.quantity[i]).checked = true;
-    return;
 }
 
 function chCap (el, cap) {
@@ -371,6 +383,7 @@ function chCap (el, cap) {
         setAdd(Filters.caps, cap);
     else
         setRemove(Filters.caps, cap);
+    notifyFilters();
     return true;
 }
 
@@ -395,6 +408,7 @@ function chDecl (el, decl) {
         setAdd(Filters.decls, decl);
     else
         setRemove(Filters.decls, decl);
+    notifyFilters();
     return true;
 }
 
@@ -415,6 +429,7 @@ function chForm (el, form) {
         setAdd(Filters.forms, form);
     else
         setRemove(Filters.forms, form);
+    notifyFilters();
     return true;
 }
 
@@ -423,6 +438,7 @@ function chGender (el, gender) {
         setAdd(Filters.genders, gender);
     else
         setRemove(Filters.genders, gender);
+    notifyFilters();
     return true;
 }
 
@@ -431,19 +447,35 @@ function chCount (el, count) {
         setAdd(Filters.quantity, count);
     else
         setRemove(Filters.quantity, count);
+    notifyFilters();
     return true;
 }
 
-function guessWords () {
-    deleteAllTableRows("table");
+function applyFilter() {
     WordStructs = randomize(wordFilter(OrigWords, Filters, pushWordStruct));
-    askWord();
-    return;
+    Filters.dirty = false;
 }
 
-function dumpWords () {
-    //alert("caps: "+Filters.caps+" decls:"+Filters.decls+" forms:"+Filters.forms+" genders:"+Filters.genders+" quantity:"+Filters.quantity);
-    deleteAllTableRows("table");
+function markFilter() {
+    Filters.dirty = true;
+}
+
+function newQuiz() {
+    deleteAllTableRows("quizTable");
+    CorrectlyAnswered = [];
+    markFilter();
+    askWord();
+    QuizBegun = true;
+}
+
+function askMore() {
+    askWord();
+    QuizBegun = true;
+}
+
+function dumpWords() {
+    //console.log("caps: "+Filters.caps+" decls:"+Filters.decls+" forms:"+Filters.forms+" genders:"+Filters.genders+" quantity:"+Filters.quantity);
+    deleteAllTableRows("quizTable");
     Words = wordFilter(OrigWords, Filters, function (list, w) { list.push(w); });
     if (Filters.quantity == [])
         return;
@@ -458,16 +490,21 @@ function dumpWords () {
                 dumpRow(word, sg, pl);
         }
     }
-    return;
 }
 
 function checkKeypress(event) {
     /* Check answer after ENTER keypress */
-    if ((event) && (event.keyCode == 13))
-        compareAnswer();
-    else if ((window.event) && (window.event.keyCode == 13))
-        compareAnswer();
-    else
+    if (((event) && (event.keyCode == 13)) || ((window.event) && (window.event.keyCode == 13))) {
+        var input = event.target;
+        compareAnswer(input);
+        if (input.id === "lastRow") {
+            askWord();
+        } else {
+            var last = document.getElementById("lastRow");
+            last.select();
+            last.focus();
+        }
+    } else
         /* ignore */;
         return true;
 }
