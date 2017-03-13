@@ -1,0 +1,86 @@
+/* r2.css */
+
+HTML	{
+	background-color: #349;
+	background-image: url("http://funarg.nfshost.com/r2/images/back8.png");
+	}
+BODY	{
+	margin: auto;
+	margin-top: /*4%*/ 2ex;
+	margin-bottom: /*3%*/ 1ex;
+	padding: 3% 6% 3% 6%;
+	max-width: 30em;
+	width:expression("35em");    /* for MSIE 6 */
+	background-color: white;
+	border: thick solid #2AD;
+	}
+Q	{ quotes: "\201C" "\201D" "\2018" "\2019" }
+Q.single	{ quotes: "\2018" "\2019" }
+UL	{ list-style-type: disc; }
+H1	{ font-size: x-large; }
+H2	{
+	font-size: large;
+	margin-top: 5%;
+	background-color: #BDF;
+	padding: 0.6%;
+	}
+H3	{ font-size: medium; background-color: #CEF; padding: 0.4%; }
+H2,H3	{ padding-left: 1.5%; }
+
+DIV.space { margin-bottom: 1em; }
+DIV.space A { margin-right: 1em; }
+DIV.nav
+	{
+	font-size: small;
+	margin-bottom: 5mm;
+	background-color: #CEF;
+	padding: 1mm;
+	}
+DIV.center-blue
+	{
+	 margin-top: 5mm;
+	 padding-bottom: 2px;
+	 background-color: #CEF;
+	 text-align: center;
+	}
+UL.bib	{ padding-left: 0; }
+UL.bib>LI	{ list-style-type: none; }
+A.pdf { color: #060; }
+.article:before	{ content: "\201C"; }
+.article:after	{ content: "\201D"; }
+.title	{ font-style: italic; }
+.small { font-size: small; }
+.tiny  { font-size: x-small; }
+
+/* apparently MSIE6 doesn't see into child selectors (>);
+   but that's minor and I don't care */
+
+BODY#index	{ max-width: 18em; padding-bottom: 3em; }
+BODY#index H1
+	{
+	background-color: #CEF;
+	margin-bottom: 5mm;
+	font-size: xx-large;
+	text-align: center;
+	}
+BODY#index IMG	{ float: right; }
+BODY#home	{ max-width: 35em; }
+BODY#links-ml	{ max-width: 35em; }
+BODY#notes-gnus	{ max-width: 45em; }
+BODY#notes-css	{ max-width: 32em; }
+BODY#notes-browning	{ max-width: 50em; }
+/* BODY#notes-browning TH.date	{ max-width: 18ex; } */
+BODY#notes-browning TH,TD
+	{
+	padding-left: 1ex;
+	padding-right: 1ex;
+	vertical-align: top;
+	}
+BODY#notes-latin-nouns	{ max-width: 40em; }
+BODY#notes-latin-verbs	{ }
+BODY.notes-latin TD.ir	{ color: red; }
+BODY.notes-latin TD	{ padding-left: 0.25em; padding-right: 0.25em; }
+BODY.notes-latin TH	{ text-align: left; padding-left: 0.5em; }
+BODY.notes-books	{ max-width: 40em; }
+BODY#articles	{ max-width: 40em; }
+BODY#quotes	{ max-width: 35em; }

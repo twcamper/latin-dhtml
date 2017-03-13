@@ -1,15 +1,16 @@
-// declList.js
-// Mike Wilson, cmikewilsonAgmailDcom
-// Created: April 8, 2005
-// Time-stamp: <2014-08-30 12:32:15 Mike>
-// Anyone may copy and/or modify this software without restriction
+/* declList.js */
+/* Mike Wilson, April 8, 2005 */
+/* Anyone may copy and/or modify this software without restriction */
+/*
+Words are from Hans Orberg's "Lingua Latina Per Se Illustrata",
+copyright 1991, 2003.
+*/
 
-// Words are from Hans Orberg's "Lingua Latina Per Se Illustrata",
-// copyright 1991, 2003.
-
-// EXPORT:
-//   OrigWords, DeclensionEndingsPrep, M, F, N, MF, SP, SG, PL
-//   wordNom, wordGenEnd, wordGender, wordBase, wordDecl, wordSP, wordCap
+/*
+EXPORT:
+  OrigWords, DeclensionEndingsPrep, M, F, N, MF, SP, SG, PL
+  wordNom, wordGenEnd, wordGender, wordBase, wordDecl, wordSP, wordCap
+*/
 
 /*
 - I need to find some official way of verifying the 3rd declension,
@@ -17,7 +18,6 @@
   explicitly states which, or how commonly they appeared in Google searches.
   Often, both are used. Maybe they vary by period, or both are acceptable.
 ? Alphabetize words in OrigWords?
-- Should probably convert the arrays to objects: {property: value, ...}
 */
 
 function wordNom (w)     { return w[0]; }
@@ -61,7 +61,7 @@ var OrigWords = [
 ["f_emina",     "-ae",    F, "1a", 0,    "f_emin", SP, 2],
 ["puella",      "-ae",    F, "1a", 0,     "puell", SP, 2],
 ["familia",     "-ae",    F, "1a", 0,    "famili", SP, 2],
-["f_ilia",      "-ae",    F, "1b", 0,     "f_ili", SP, 2],
+["f_ilia",      "-ae",    F, "1a", 0,     "f_ili", SP, 2],
 ["ancilla",     "-ae",    F, "1a", 0,    "ancill", SP, 2],
 ["domina",      "-ae",    F, "1a", 0,     "domin", SP, 2],
 ["p_agina",     "-ae",    F, "1a", 0,    "p_agin", SP, 2],
@@ -358,32 +358,32 @@ var OrigWords = [
 ];
 
 var DeclensionEndingsPrep = [
-["0a", ["", "", "", "", ""],    // indeclinable: mane
+["0a", ["", "", "", "", ""],    /* indeclinable: mane */
        ["", "", "", "", ""]],
-["1a", [  "a",  "am",    "ae",   "ae",   "_a"],    // puella -ae
+["1a", [  "a",  "am",    "ae",   "ae",   "_a"],    /* puella -ae */
        [ "ae", "_as", "_arum",  "_is",  "_is"]],
-["1b", [  "a",  "am",    "ae",   "ae",   "_a"],    // filia -ae
-       [ "ae", "_as", "_arum",  ["_is", "_abus"],  ["_is", "_abus"]]],
-["2m", [ "us",  "um",    "_i",   "_o",   "_o"],    // dominus -_i
+["2m", [ "us",  "um",    "_i",   "_o",   "_o"],    /* dominus -_i */
        [ "_i", "_os", "_orum",  "_is",  "_is"]],
-["2n", [ "um",  "um",    "_i",   "_o",   "_o"],    // oppidum -_i
+["2n", [ "um",  "um",    "_i",   "_o",   "_o"],    /* oppidum -_i */
        [  "a",   "a", "_orum",  "_is",  "_is"]],
-["3a", [ "is",  "em",    "is",   "_i",    "e"],    // ovis -is
+["3a", [ "is",  "em",    "is",   "_i",    "e"],    /* ovis -is */
        ["_es", "_es",   "ium", "ibus", "ibus"]],
-["3b", [ "is",  "em",    "is",   "_i",    "e"],    // canis -is
+["3b", [ "is",  "em",    "is",   "_i",    "e"],    /* canis -is */
        ["_es", "_es",    "um", "ibus", "ibus"]],
-["3c", [   "",    "",    "is",   "_i",    "e"],    // fl_umen -inis
+["3c", [   "",    "",    "is",   "_i",    "e"],    /* fl_umen -inis */
        [  "a",   "a",    "um", "ibus", "ibus"]],
-["3d", [  "e",   "e",    "is",   "_i",   "_i"],    // mare -is
+["3d", [  "e",   "e",    "is",   "_i",   "_i"],    /* mare -is */
        [ "ia",  "ia",   "ium", "ibus", "ibus"]],
-["3e", [ "is",  "im",    "is",   "_i",   "_i"],    // puppis -is
+["3e", [ "is",  "im",    "is",   "_i",   "_i"],    /* puppis -is */
        ["_es", "_es",   "ium", "ibus", "ibus"]],
-["4a", [ "us",  "um",   "_us",  "u_i",   "_u"],    // manus -_us
+["4a", [ "us",  "um",   "_us",  "u_i",   "_u"],    /* manus -_us */
        ["_us", "_us",   "uum", "ibus", "ibus"]],
-["5a", ["_es",  "em",  "_e_i",  "_e_i",    "_e"],  // di_es -_e_i
+["5a", ["_es",  "em",  "_e_i",  "_e_i",    "_e"],  /* di_es -_e_i */
        ["_es", "_es", "_erum", "_ebus", "_ebus"]],
-["5b", ["_es",  "em",   "e_i",   "e_i",    "_e"],  // r_es re_i
+["5b", ["_es",  "em",   "e_i",   "e_i",    "_e"],  /* r_es re_i */
        ["_es", "_es", "_erum", "_ebus", "_ebus"]]
 ];
 
-// homo hominum
+/*
+homo hominum
+*/

@@ -1,9 +1,8 @@
-// declQuiz.js
-// Mike Wilson, cmikewilsonAgmailDcom
-// Created April 13, 2005
-// Time-stamp: <2014-09-01 07:19:36 Mike>
+/* declQuiz.js */
+/* Mike Wilson, cmikewilsonAgmailDcom */
+/* April 13, 2005 - March 31, 2006 */
 
-// Anyone may copy and/or modify this software without restriction.
+/* Anyone may copy and/or modify this software without restriction. */
 
 /*
 - Would be nice to not re-ask the same thing.
@@ -17,21 +16,19 @@
   macronPrintable is a little slow.
 ? Looks like string[n] isn't allowed.  Mozilla is fine with it,
   but IE chokes.  Can't find it in the ECMA spec.  Must use .charAt(n); weird.
-- Just heard about console.log("foo", arg) for debugging.
 */
 
-// IMPORT from nounList:
-//     OrigWords, wordNom, wordGenEnd, wordGender, wordCap,
-//     M, F, N, MF, SP, SG, PL
-// IMPORT from sets: *
-// IMPORT from random: *
-// IMPORT from macrons: macrons_init, macronsPrintable, macronsComparable
+/*
+IMPORT from nounList:
+    OrigWords, wordNom, wordGenEnd, wordGender, wordCap,
+    M, F, N, MF, SP, SG, PL
+IMPORT from sets: *
+IMPORT from random: *
+IMPORT from macrons: macrons_init, macronsPrintable, macronsComparable
+*/
 
-// the word, whether it's singular or plural, and it's target declension
 var Word, TargetSP, TargetForm;
-// Filters are the limits on word selection made in the html box
 var Filters = [];
-// Words are those that made it through the filters
 var Words = [];
 var AllChapters = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
 		   21,22,23,24,25,26,27,28,29,30,31,32,33,34,35];
@@ -40,55 +37,40 @@ var AllDecls = [1,2,3,4,5,0];
 var AllForms = ["nom", "acc", "gen", "dat", "abl"];
 var AllGenders = [M, F, N];
 var AllQuantities = [SG, PL];
-// DeclensionEndings[declension type][sg/pl][nom/.../abl]
+/* DeclensionEndings[declension type][sg/pl][nom/.../abl] */
 var DeclensionEndings = [];
 
-var ti, tf, t=0;    // for occasional profiling
+var ti, tf, t=0;    /* for occasional profiling */
 
 
 function wordEnding (word, sp, form) {
-    // return the declined word ending
+    /* return the declined word ending */
     return DeclensionEndings[wordDecl(word)][sp][form];
 }
 
 function wordDecline (word, sp, form) {
-    // returns a list of declined words
-    // (might have alternates: filiis/filiabus)
+    /* return a declined word */
     var opt = wordDeclOpt(word);
-    // wordDeclOpt allows for a couple common variations in the declensions
-    // opt=0 standard;  opt=1 nom=base; opt=2 nom=base, acc=base
     if ((opt > 0) && (sp === SG)) {
         if ((opt >= 1) && (form == "nom"))
-            return [wordNom(word)];
+            return wordNom(word);
         if ((opt == 2) && (form == "acc"))
-            return [wordNom(word)];
+            return wordNom(word);
     }
-    var ending  = wordEnding(word, sp, form);
-    var endings;
-    var i;
-    var words=[];
-
-    if (isArray(ending))
-        endings=ending
-    else
-        endings=[ending];
-
-    for (i=0 ; i<endings.length ; i++)
-        words[words.length] = wordBase(word) + endings[i];
-    return words;
+    return wordBase(word) + wordEnding(word, sp, form);
 }
 
 function pluralisTantum(word) {
-    // is the word plural only?
+    /* is the word plural only? */
     return (wordSP(word) === PL);
 }
 
 function fillDeclensionEndingsArray (dp) {
-    // DeclensionEndingsPrep is a table of declension endings.
-    // It's in a format that's easy to read and write,
-    // but a format like: DeclensionEndings["2a"][SG]["acc"]
-    // is better for program use.
-
+    /* DeclensionEndingsPrep is a table of declension endings.
+       It's in a format that's easy to read and write,
+       but a format like: DeclensionEndings["2a"][SG]["acc"]
+       is better for program use.
+    */
     var d, decl, sg, pl, f;
     for (d=0 ; d<DeclensionEndingsPrep.length ; d++) {
         decl = DeclensionEndingsPrep[d][0];
@@ -107,8 +89,7 @@ function fillDeclensionEndingsArray (dp) {
 }
 
 function wordFilter (a, filters) {
-    // remove any words not of the selected chapters and declensions
-
+    /* remove any words not of the selected chapters and declensions */
     var i;
     var b = [];
     for (i=0 ; i<a.length ; i++) {
@@ -128,47 +109,38 @@ function wordFilter (a, filters) {
     return b;
 }
 
-/*
 function copyArray (a) {
     var b = [];
     for (var i in a)
         b.push(a[i]);
     return b;
 }
-*/
 
 function compareAnswer () {
-    // Compute the correct answer and compare it with yours.
-
-    var answers = wordDecline(Word, TargetSP, TargetForm);
+    /* Compute the correct answer and compare it with yours. */
+    var answer = new String(wordDecline(Word, TargetSP, TargetForm));
     var entered = document.getElementById("input").value;
-    var tdResult = document.getElementById("result");
-    var flag = 0;
-    var msg, i, answer;
-    for (i=0 ; i<answers.length ; i++) {
-        answer = answers[i];
-        if (macronsComparable(answer.toLowerCase()) == entered.toLowerCase()) {
-            msg = "Correct: " + macronsPrintable(answer);
-	    tdResult.className = "correct";
-            flag = 1;
-            break;
-        }
+    var msg;
+    var tdr = document.getElementById("result");
+    if (macronsComparable(answer.toLowerCase()) == entered.toLowerCase()) {
+        msg = "Correct: " + macronsPrintable(answer);
+	tdr.className = "correct";
     }
-    if (! flag) {
+    else {
         msg = "Incorrect: " + macronsPrintable(answer);
-	tdResult.className = "incorrect";
+	tdr.className = "incorrect";
     }
-    tdResult.appendChild(document.createTextNode(msg));
+    tdr.appendChild(document.createTextNode(msg));
     askWord();
     return false;
 }
 
 function askWord () {
-    // remove ID from previous TD; pick next word; add to table
-    // ID must be unique, so it must be removed from the last TD
-    // before it can be included in the new TD.
-    // Also remove onKeypress action from old INPUT.
-
+    /* remove ID from previous TD; pick next word; add to table */
+    /* ID must be unique, so it must be removed from the last TD
+       before it can be included in the new TD.
+       Also remove onKeypress action from old INPUT.
+    */
     var input = document.getElementById("input")
     if (input) {
         input.removeAttribute("onKeypress");
@@ -205,8 +177,7 @@ function deleteAllTableRows (id) {
 }
 
 function addNewRow (w, q, tf) {
-    // Show the sg nominative, sg genitive ending, and gender of the word.
-
+    /* Show the sg nominative, sg genitive ending, and gender of the word. */
     var table = document.getElementById("table");
     var tr = table.insertRow(-1);
     var th = tr.insertCell(-1);    /* This isn't really a TH */
@@ -240,8 +211,7 @@ function addNewRow (w, q, tf) {
 }
 
 function dumpRow (word, sg, pl) {
-    // Add two (or one) rows filled with all the declensions
-
+    /* Add two (or one) rows filled with all the declensions */
     var table = document.getElementById("table");
     if (sg) {
         var tr = table.insertRow(-1);
@@ -257,8 +227,7 @@ function dumpRow (word, sg, pl) {
         for (var i in AllForms)
             if (setMember(Filters["forms"], AllForms[i])) {
                 var td = tr.insertCell(-1);
-                var words = wordDecline(word,SG,AllForms[i]);
-                var str = macronsPrintable(words[0]);
+                var str = macronsPrintable(wordDecline(word,SG,AllForms[i]))
                 td.appendChild(document.createTextNode(str));
             }
     }
@@ -280,40 +249,40 @@ function dumpRow (word, sg, pl) {
         for (var i in AllForms)
             if (setMember(Filters["forms"], AllForms[i])) {
                 var td = tr.insertCell(-1);
-                var words = wordDecline(word,PL,AllForms[i]);
-                var str = macronsPrintable(words[0]);
+                var str = macronsPrintable(wordDecline(word,PL,AllForms[i]))
                 td.appendChild(document.createTextNode(str));
             }
     }
     return;
 }
 
-
-// Event Handlers
+/*
+Event Handlers
+*/
 
 function init () {
-    // read the macron vowels; I don't know how to get them otherwise
+    /* read the macron vowels; I don't know how to get them otherwise */
     var macronList = document.getElementById("macrons").firstChild.nodeValue;
     macrons_init(macronList);
     fillDeclensionEndingsArray();
 
-    // set up default Filters
+    /* set up default Filters */
     Filters["caps"] = [1];
     Filters["decls"] = copyArray(AllDecls);
     Filters["forms"] = copyArray(AllForms);
     Filters["genders"] = copyArray(AllGenders);
     Filters["quantity"] = copyArray(AllQuantities);
 
-    // figure out which chapters are implemented
+    /* figure out which chapters are implemented */
     for (var i in OrigWords)
 	setAdd(ImplementedChapters, wordCap(OrigWords[i]));
 
-    // disable unimplemented chapters
+    /* disable unimplemented chapters */
     var unimplemented = setSubtract(AllChapters, ImplementedChapters);
     for (var i in unimplemented)
         document.getElementById("cap"+unimplemented[i]).disabled = true;
 
-    // uncheck (for reloads), then check chapters, decls, etc.
+    /* uncheck (for reloads), then check chapters, decls, etc. */
     for (var i in ImplementedChapters)
 	document.getElementById("cap"+ImplementedChapters[i]).checked = false;
     for (var i in AllDecls)
@@ -339,18 +308,18 @@ function init () {
 }
 
 function chCap (el, cap) {
-    // one of the chapter filter control checkboxes changed
+    /* one of the chapter filter control checkboxes changed */
     if (cap == "all") {
-        // Select all chapters
+        /* Select all chapters */
 	Filters["caps"] = copyArray(ImplementedChapters);
-        // check all the boxes
+        /* check all the boxes */
         for (var i in Filters["caps"])
             document.getElementById("cap"+Filters["caps"][i]).checked = true;
     }
     else if (cap == "none") {
-        // deselect all chapters
+        /* deselect all chapters */
         Filters["caps"] = [];
-        // uncheck all the boxes
+        /* uncheck all the boxes */
         for (var i in ImplementedChapters)
             document.getElementById("cap"+ImplementedChapters[i]).checked = false;
     }
@@ -362,7 +331,7 @@ function chCap (el, cap) {
 }
 
 function chDecl (el, decl) {
-    // one of the Declension filter control checkboxes changed
+    /* one of the Declension filter control checkboxes changed */
     if (decl == "all") {
         /* Select all decls */
 	Filters["decls"] = copyArray(AllDecls);
@@ -385,7 +354,7 @@ function chDecl (el, decl) {
 }
 
 function chForm (el, form) {
-    // one of the Form filter control checkboxes changed
+    /* one of the Form filter control checkboxes changed */
     if (form == "all") {
         Filters["forms"] = copyArray(AllForms);
         for (var i in Filters["forms"])
@@ -447,7 +416,7 @@ function dumpWords () {
 }
 
 function checkKeypress(event) {
-    // Check answer after ENTER keypress
+    /* Check answer after ENTER keypress */
     if ((event) && (event.keyCode == 13))
         compareAnswer();
     else if ((window.event) && (window.event.keyCode == 13))
