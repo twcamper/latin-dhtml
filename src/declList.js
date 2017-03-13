@@ -143,7 +143,7 @@ var OrigWords = [
 ["tabern_arius", "-_i",   M, "2m", 0, "tabern_ari", SP, 8],
 ["taberna",      "-ae",   F, "1a", 0, "tabern",     SP, 8],
 
-["arbor",      "-oris",   F,   "3b", 1, "arb_or",   SP, 9],
+["arbor",      "-oris",   F,   "3b", 1, "arbor",    SP, 9],
 ["caelum",     "-_i",     N,   "2n", 0, "cael",     SP, 9],
 ["campus",     "-_i",     M,   "2m", 0, "camp",     SP, 9],
 ["canis",      "-is",     MF,  "3b", 0, "can",      SP, 9],
