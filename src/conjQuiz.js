@@ -24,12 +24,12 @@ function wordFilter (wordsIn) {
     /* remove any words not in a selected chapter */
     var wordsOut = [];
     for (var w in wordsIn) {
-	var word = wordsIn[w];
-	var cap = wordCap(word);
+        var word = wordsIn[w];
+        var cap = wordCap(word);
         var ch = wordCh(word);
-	if ((setMember(Filter["Capitula"],cap))
+        if ((setMember(Filter["Capitula"],cap))
             || (setMember(Filter["Chapters"],ch)))
-	    wordsOut.push(word);
+            wordsOut.push(word);
     }
     return wordsOut;
 }
@@ -52,11 +52,11 @@ function compareAnswer () {
     var tdr = document.getElementById("result");
     if (macronsPrintable(answer.toLowerCase()) == entered.toLowerCase()) {
         msg = "Correct: " + macronsPrintable(answer);
-	tdr.className = "correct";
+        tdr.className = "correct";
     }
     else {
         msg = "Incorrect: " + macronsPrintable(answer);
-	tdr.className = "incorrect";
+        tdr.className = "incorrect";
     }
     tdr.appendChild(document.createTextNode(msg));
     askWord();
@@ -84,33 +84,33 @@ function askWord () {
         && (Filter["Persons"].length > 0) && (Filter["Numbers"].length > 0)
         && (Filter["Tenses"].length > 0)  && (Filter["Manners"].length > 0)
         && (Filter["Voices"].length > 0)) {
-        Word = Words.pop();
-        TargetPerson = randomChoose(Filter["Persons"]);
-        TargetNumber = randomChoose(Filter["Numbers"]);
-        var TMVs = randomize(copyArray(AllowedTMVs));
-        TargetConj = null;
-        for (var tmv in TMVs) {
-            var tc = TMVs[tmv];
-            var t = conjTense(tc);
-            if (setMember(Filter["Tenses"], t)) {
-                var m = conjManner(tc);
-                if (setMember(Filter["Manners"], m)) {
-                    var v = conjVoice(tc);
-                    if (setMember(Filter["Voices"], v)) {
-                        TargetConj = tc;
-                        break;
+            Word = Words.pop();
+            TargetPerson = randomChoose(Filter["Persons"]);
+            TargetNumber = randomChoose(Filter["Numbers"]);
+            var TMVs = randomize(copyArray(AllowedTMVs));
+            TargetConj = null;
+            for (var tmv in TMVs) {
+                var tc = TMVs[tmv];
+                var t = conjTense(tc);
+                if (setMember(Filter["Tenses"], t)) {
+                    var m = conjManner(tc);
+                    if (setMember(Filter["Manners"], m)) {
+                        var v = conjVoice(tc);
+                        if (setMember(Filter["Voices"], v)) {
+                            TargetConj = tc;
+                            break;
+                        }
                     }
                 }
             }
-        }
-        if (TargetConj !== null) {
-            addNewRow(Word, TargetPerson, TargetNumber, TargetConj);
-            if (window.scrollBy)    /* scroll down -- not standard */
-                window.scrollBy(0,100);
-            var input = document.getElementById("input")
-            input.select();
-    	    input.focus();
-        }
+            if (TargetConj !== null) {
+                addNewRow(Word, TargetPerson, TargetNumber, TargetConj);
+                if (window.scrollBy)    /* scroll down -- not standard */
+                    window.scrollBy(0,100);
+                var input = document.getElementById("input")
+                input.select();
+                input.focus();
+            }
     }
     return;
 }
@@ -125,7 +125,7 @@ function addNewRow(word, p, n, c) {
     var th = tr.insertCell(-1);    /* This isn't really a TH */
     th.className = "ref";
     var txt = wordPresIndAct(word) + " " + wordPresIndInf(word) + " " +
-              wordPresPerAct(word) + " " + wordPasPart(word);
+        wordPresPerAct(word) + " " + wordPasPart(word);
     var str = macronsPrintable(txt);
     th.appendChild(document.createTextNode(str));
 
@@ -268,7 +268,7 @@ function init () {
 
     /* figure out which chapters are implemented */
     for (var i in OrigWords) {
-	setAdd(ImplementedLLCapitula, wordCap(OrigWords[i]));
+        setAdd(ImplementedLLCapitula, wordCap(OrigWords[i]));
         setAdd(ImplementedWLChapters, wordCh(OrigWords[i]));
     }
 
@@ -285,9 +285,9 @@ function init () {
 
     /* uncheck (for reloads), then check chapters, tenses, etc. */
     for (var i in ImplementedLLCapitula)
-	document.getElementById("cap"+ImplementedLLCapitula[i]).checked=false;
+        document.getElementById("cap"+ImplementedLLCapitula[i]).checked=false;
     for (var i in ImplementedWLChapters)
-	document.getElementById("ch"+ImplementedWLChapters[i]).checked=false;
+        document.getElementById("ch"+ImplementedWLChapters[i]).checked=false;
 
     for (var i in AllPersons)
         document.getElementById("p"+AllPersons[i]).checked = false;
@@ -301,19 +301,19 @@ function init () {
         document.getElementById("v"+AllVoices[i]).checked = false;
 
     for (var i in Filter["Capitula"])
-	document.getElementById("cap"+Filter["Capitula"][i]).checked = true;
+        document.getElementById("cap"+Filter["Capitula"][i]).checked = true;
     for (var i in Filter["Chapters"])
-	document.getElementById("ch"+Filter["Chapters"][i]).checked = true;
+        document.getElementById("ch"+Filter["Chapters"][i]).checked = true;
     for (var i in Filter["Persons"])
         document.getElementById("p"+Filter["Persons"][i]).checked = true;
     for (var i in Filter["Numbers"])
         document.getElementById("n"+Filter["Numbers"][i]).checked = true;
     for (var i in Filter["Tenses"])
-	document.getElementById("t"+Filter["Tenses"][i]).checked = true;
+        document.getElementById("t"+Filter["Tenses"][i]).checked = true;
     for (var i in Filter["Manners"])
-	document.getElementById("m"+Filter["Manners"][i]).checked = true;
+        document.getElementById("m"+Filter["Manners"][i]).checked = true;
     for (var i in Filter["Voices"])
-	document.getElementById("v"+Filter["Voices"][i]).checked = true;
+        document.getElementById("v"+Filter["Voices"][i]).checked = true;
     return;
 }
 
@@ -321,7 +321,7 @@ function chCap (el, cap) {
     /* one of the chapter filter control checkboxes changed */
     if (cap == "all") {
         /* Select all chapters */
-	Filter["Capitula"] = copyArray(ImplementedLLCapitula);
+        Filter["Capitula"] = copyArray(ImplementedLLCapitula);
         /* check all the boxes */
         for (var i in Filter["Capitula"])
             document.getElementById("cap"+Filter["Capitula"][i]).checked = true;
@@ -344,7 +344,7 @@ function chCh (el, ch) {
     /* one of the Wheelock chapter filter control checkboxes changed */
     if (ch == "all") {
         /* Select all chapters */
-	Filter["Chapters"] = copyArray(ImplementedWLChapters);
+        Filter["Chapters"] = copyArray(ImplementedWLChapters);
         /* check all the boxes */
         for (var i in Filter["Chapters"])
             document.getElementById("ch"+Filter["Chapters"][i]).checked = true;
@@ -420,7 +420,7 @@ function dumpWords () {
     deleteAllTableRows("table");
     Words = wordFilter(OrigWords);
     for (w in Words) {
-	var word = Words[w];
+        var word = Words[w];
         dumpRow(word);
     }
     return;
@@ -434,5 +434,5 @@ function checkKeypress(event) {
         compareAnswer();
     else
         /* ignore */;
-    return true;
+        return true;
 }

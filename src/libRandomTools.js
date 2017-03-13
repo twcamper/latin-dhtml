@@ -34,12 +34,12 @@ function randomize (a) {
     /* c = indices mixed up, 8,1,4,... */
     for (i=0 ; i<len ; i++) {
         j = Math.floor(Math.random() * b.length);
-	c[i] = b[j];
-	b.splice(j,1);
+        c[i] = b[j];
+        b.splice(j,1);
     }
     /* d = array with original elements, mixed up */
     for (i=0 ; i<len ; i++)
-	d[i] = a[c[i]];
+        d[i] = a[c[i]];
     delete b;
     delete c;
     return (d);
@@ -55,7 +55,7 @@ function testRandom () {
         var one = randomChoose(basket);
         for (j=0 ; j<basket.length ; j++)
             if (basket[j] == one)
-	        counts[j]++;
+                counts[j]++;
     }
     alert(counts.join(" "));
     return;

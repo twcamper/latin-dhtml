@@ -22,7 +22,7 @@ function setify (a) {
 function setAdd (a, item) {
     for (var i=0 ; i<a.length ; i++)
         if (a[i] == item)
-	    return;
+            return;
     a.push(item);
     return;
 }
@@ -31,9 +31,9 @@ function setRemove (a, item) {
     var i=0;
     while (i<a.length)
         if (a[i] == item)
-	    a.splice(i,1);
-        else
-            i++;
+            a.splice(i,1);
+    else
+        i++;
     return;
 }
 
@@ -58,8 +58,8 @@ function setIntersect (a, b) {
     /* this is a predicate */
     for (var i=0 ; i<a.length ; i++)
         for (var j=0 ; j<b.length ; j++)
-	    if (a[i] == b[j])
-	        return true;
+            if (a[i] == b[j])
+                return true;
     return false;
 }
 
@@ -67,13 +67,13 @@ function setIntersection (a, b) {
     var c = [];
     for (var i in a) {
         var ai = a[i];
-	for (var j in b) {
-	    var bj = b[j];
-	    if (bj == ai) {
-	        c.push(ai);
-		break;
-	    }
-	}
+        for (var j in b) {
+            var bj = b[j];
+            if (bj == ai) {
+                c.push(ai);
+                break;
+            }
+        }
     }
     return c;
 }
@@ -83,7 +83,7 @@ function setSubtract (a, b) {
     var c = [];
     for (var i in a)
         if (! setMember(b, a[i]))
-	    c.push(a[i]);
+            c.push(a[i]);
     return c;
 }
 

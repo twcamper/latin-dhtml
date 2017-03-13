@@ -12,13 +12,13 @@ function copyArray (a) {
 
 function equal (a,b) {
     if ((typeof(a)=="number") && (typeof(b)=="number"))
-	return (a==b);
+        return (a==b);
     if (a.length == b.length) {
         for (i in a)
-	    if (! equal(a[i],b[i]))
-	        return false;
+            if (! equal(a[i],b[i]))
+                return false;
         return true;
-        }
+    }
     else
         return false;
 }
@@ -26,24 +26,24 @@ function equal (a,b) {
 function map (f,as) {
     bs = []
     for (var a in as)
-	bs.push(f(a))
+        bs.push(f(a))
     return bs;
 }
 
 function member (item, as) {
     for (var i in as)
-	if (item == as[i])
-	    return true;
+        if (item == as[i])
+            return true;
     return false;
 }
 
 function removeall2 (item,as,start) {
     for (var i=start ; i<as.length ; i++)
-	if (item==as[i]) {
-	    as.splice(i,1);
-	    removeall2(item,as,i);
-	    break;
-	}
+        if (item==as[i]) {
+            as.splice(i,1);
+            removeall2(item,as,i);
+            break;
+        }
     return as;
 }
 

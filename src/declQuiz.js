@@ -70,19 +70,19 @@ function fillDeclensionEndingsArray (dp) {
        It's in a format that's easy to read and write,
        but a format like: DeclensionEndings["2a"][SG]["acc"]
        is better for program use.
-    */
+       */
     var d, decl, sg, pl, f;
     for (d=0 ; d<DeclensionEndingsPrep.length ; d++) {
         decl = DeclensionEndingsPrep[d][0];
-	sg   = DeclensionEndingsPrep[d][1];
-	pl   = DeclensionEndingsPrep[d][2];
-	DeclensionEndings[decl] = [];
-	DeclensionEndings[decl][SG] = [];
-	DeclensionEndings[decl][PL] = [];
-	for (f=0 ; f<AllForms.length ; f++) {
-	    DeclensionEndings[decl][SG][AllForms[f]] = sg[f];
-	    DeclensionEndings[decl][PL][AllForms[f]] = pl[f];
-	}
+        sg   = DeclensionEndingsPrep[d][1];
+        pl   = DeclensionEndingsPrep[d][2];
+        DeclensionEndings[decl] = [];
+        DeclensionEndings[decl][SG] = [];
+        DeclensionEndings[decl][PL] = [];
+        for (f=0 ; f<AllForms.length ; f++) {
+            DeclensionEndings[decl][SG][AllForms[f]] = sg[f];
+            DeclensionEndings[decl][PL][AllForms[f]] = pl[f];
+        }
     }
     delete DeclensionEndingsPrep;
     return;
@@ -101,9 +101,9 @@ function wordFilter (a, filters) {
             if (setMember(filters["decls"], declN)) {
                 var genders = gender.split("");
                 if (setIntersect(filters["genders"], genders))
-		    if (!(pluralisTantum(word)
- 			  && !setMember(filters["quantity"], PL)))
-    	                b.push(word);
+                    if (!(pluralisTantum(word)
+                        && !setMember(filters["quantity"], PL)))
+                        b.push(word);
             }
     }
     return b;
@@ -124,11 +124,11 @@ function compareAnswer () {
     var tdr = document.getElementById("result");
     if (macronsPrintable(answer.toLowerCase()) == entered.toLowerCase()) {
         msg = "Correct: " + macronsPrintable(answer);
-	tdr.className = "correct";
+        tdr.className = "correct";
     }
     else {
         msg = "Incorrect: " + macronsPrintable(answer);
-	tdr.className = "incorrect";
+        tdr.className = "incorrect";
     }
     tdr.appendChild(document.createTextNode(msg));
     askWord();
@@ -152,18 +152,18 @@ function askWord () {
     if (Words.length == 0)
         Words = randomize(wordFilter(OrigWords, Filters));
     if ((Words.length > 0) && (Filters["quantity"].length > 0)
-                           && (Filters["forms"].length > 0)) {
-        Word = Words.pop();
-        TargetSP = randomChoose(Filters["quantity"]);
-        if (pluralisTantum(Word))
-            TargetSP = PL;
-        TargetForm = randomChoose(Filters["forms"]);
-        addNewRow(Word, TargetSP, TargetForm);
-        if (window.scrollBy)    /* scroll down -- not standard */
-            window.scrollBy(0,100);
-        var input = document.getElementById("input")
-        input.select();
-    	input.focus();
+        && (Filters["forms"].length > 0)) {
+            Word = Words.pop();
+            TargetSP = randomChoose(Filters["quantity"]);
+            if (pluralisTantum(Word))
+                TargetSP = PL;
+            TargetForm = randomChoose(Filters["forms"]);
+            addNewRow(Word, TargetSP, TargetForm);
+            if (window.scrollBy)    /* scroll down -- not standard */
+                window.scrollBy(0,100);
+            var input = document.getElementById("input")
+            input.select();
+            input.focus();
     }
     return;
 }
@@ -183,10 +183,10 @@ function addNewRow (w, q, tf) {
     var th = tr.insertCell(-1);    /* This isn't really a TH */
     th.className = "ref";
     var txt = macronsPrintable(wordNom(w))
-      + " " + macronsPrintable(wordGenEnd(w))
-      + " " + wordGender(w);
+        + " " + macronsPrintable(wordGenEnd(w))
+        + " " + wordGender(w);
     if (pluralisTantum(w))
-	txt = txt + " pl";
+        txt = txt + " pl";
     th.appendChild(document.createTextNode(txt));
     /* the target word form and sg/pl. */
     var tdtf = tr.insertCell(-1);
@@ -215,15 +215,15 @@ function dumpRow (word, sg, pl) {
     var table = document.getElementById("table");
     if (sg) {
         var tr = table.insertRow(-1);
-	tr.className = "dump";
-	/* header */
-	var th = tr.insertCell(-1);
-	th.className = "ref";
-	var txt = macronsPrintable(wordNom(word))
-	          + " " + macronsPrintable(wordGenEnd(word))
-		  + " " + wordGender(word);
+        tr.className = "dump";
+        /* header */
+        var th = tr.insertCell(-1);
+        th.className = "ref";
+        var txt = macronsPrintable(wordNom(word))
+            + " " + macronsPrintable(wordGenEnd(word))
+            + " " + wordGender(word);
         th.appendChild(document.createTextNode(txt));
-	/* body */
+        /* body */
         for (var i in AllForms)
             if (setMember(Filters["forms"], AllForms[i])) {
                 var td = tr.insertCell(-1);
@@ -233,19 +233,19 @@ function dumpRow (word, sg, pl) {
     }
     if (pl) {
         var tr = table.insertRow(-1);
-	tr.className = "dump";
-	if (!sg) {
-	    var th = tr.insertCell(-1);
-	    th.className = "ref";
-	    var txt = macronsPrintable(wordNom(word))
-	              + " " + macronsPrintable(wordGenEnd(word))
-		      + " " + wordGender(word);
+        tr.className = "dump";
+        if (!sg) {
+            var th = tr.insertCell(-1);
+            th.className = "ref";
+            var txt = macronsPrintable(wordNom(word))
+                + " " + macronsPrintable(wordGenEnd(word))
+                + " " + wordGender(word);
             if (pluralisTantum(word))
-	        txt = txt + " pl";
+                txt = txt + " pl";
             th.appendChild(document.createTextNode(txt));
-	}
-	else
-	    tr.insertCell(-1);
+        }
+        else
+            tr.insertCell(-1);
         for (var i in AllForms)
             if (setMember(Filters["forms"], AllForms[i])) {
                 var td = tr.insertCell(-1);
@@ -275,7 +275,7 @@ function init () {
 
     /* figure out which chapters are implemented */
     for (var i in OrigWords)
-	setAdd(ImplementedChapters, wordCap(OrigWords[i]));
+        setAdd(ImplementedChapters, wordCap(OrigWords[i]));
 
     /* disable unimplemented chapters */
     var unimplemented = setSubtract(AllChapters, ImplementedChapters);
@@ -284,26 +284,26 @@ function init () {
 
     /* uncheck (for reloads), then check chapters, decls, etc. */
     for (var i in ImplementedChapters)
-	document.getElementById("cap"+ImplementedChapters[i]).checked = false;
+        document.getElementById("cap"+ImplementedChapters[i]).checked = false;
     for (var i in AllDecls)
         document.getElementById("d"+AllDecls[i]).checked = false;
     for (var i in AllForms)
         document.getElementById("f"+AllForms[i]).checked = false;
     for (var i in AllGenders)
-	document.getElementById("g"+AllGenders[i]).checked = false;
+        document.getElementById("g"+AllGenders[i]).checked = false;
     for (var i in AllQuantities)
-	document.getElementById(AllQuantities[i]).checked = false;
+        document.getElementById(AllQuantities[i]).checked = false;
 
     for (var i in Filters["caps"])
-	document.getElementById("cap"+Filters["caps"][i]).checked = true;
+        document.getElementById("cap"+Filters["caps"][i]).checked = true;
     for (var i in Filters["decls"])
         document.getElementById("d"+Filters["decls"][i]).checked = true;
     for (var i in Filters["forms"])
         document.getElementById("f"+Filters["forms"][i]).checked = true;
     for (var i in Filters["genders"])
-	document.getElementById("g"+Filters["genders"][i]).checked = true;
+        document.getElementById("g"+Filters["genders"][i]).checked = true;
     for (var i in Filters["quantity"])
-	document.getElementById(Filters["quantity"][i]).checked = true;
+        document.getElementById(Filters["quantity"][i]).checked = true;
     return;
 }
 
@@ -311,7 +311,7 @@ function chCap (el, cap) {
     /* one of the chapter filter control checkboxes changed */
     if (cap == "all") {
         /* Select all chapters */
-	Filters["caps"] = copyArray(ImplementedChapters);
+        Filters["caps"] = copyArray(ImplementedChapters);
         /* check all the boxes */
         for (var i in Filters["caps"])
             document.getElementById("cap"+Filters["caps"][i]).checked = true;
@@ -334,7 +334,7 @@ function chDecl (el, decl) {
     /* one of the Declension filter control checkboxes changed */
     if (decl == "all") {
         /* Select all decls */
-	Filters["decls"] = copyArray(AllDecls);
+        Filters["decls"] = copyArray(AllDecls);
         /* check all the boxes */
         for (var i in Filters["decls"])
             document.getElementById("d"+Filters["decls"][i]).checked = true;
@@ -362,8 +362,8 @@ function chForm (el, form) {
     }
     else if (form == "none") {
         Filters["forms"] = [];
-	for (var i in AllForms)
-	    document.getElementById("f"+AllForms[i]).checked = false;
+        for (var i in AllForms)
+            document.getElementById("f"+AllForms[i]).checked = false;
     }
     else if (el.checked)
         setAdd(Filters["forms"], form);
@@ -396,7 +396,7 @@ function guessWords () {
 }
 
 function dumpWords () {
-//alert("caps: "+Filters["caps"]+" decls:"+Filters["decls"]+" forms:"+Filters["forms"]+" genders:"+Filters["genders"]+" quantity:"+Filters["quantity"]);
+    //alert("caps: "+Filters["caps"]+" decls:"+Filters["decls"]+" forms:"+Filters["forms"]+" genders:"+Filters["genders"]+" quantity:"+Filters["quantity"]);
     deleteAllTableRows("table");
     Words = wordFilter(OrigWords, Filters);
     if (Filters["quantity"] == [])
@@ -406,8 +406,8 @@ function dumpWords () {
         var pl = setMember(Filters["quantity"], PL);
         for (var i in Words) {
             var word = Words[i];
-	    if (pluralisTantum(word))
-		dumpRow(word, false, pl);
+            if (pluralisTantum(word))
+                dumpRow(word, false, pl);
             else
                 dumpRow(word, sg, pl);
         }
@@ -423,5 +423,5 @@ function checkKeypress(event) {
         compareAnswer();
     else
         /* ignore */;
-    return true;
+        return true;
 }

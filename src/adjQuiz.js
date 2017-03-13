@@ -268,7 +268,7 @@ function chCap (el, cap) {
     /* one of the chapter filter control checkboxes changed */
     if (cap == "all") {
         /* Select all chapters */
-	FilterCaps = copyArray(ImplementedChapters);
+        FilterCaps = copyArray(ImplementedChapters);
         /* check all the boxes */
         for (var i in FilterCaps)
             document.getElementById("cap"+FilterCaps[i]).checked = true;
@@ -291,7 +291,7 @@ function chDecl (el, decl) {
     /* one of the Declension filter control checkboxes changed */
     if (decl == "all") {
         /* Select all decls */
-	FilterDecls = copyArray(Decls);
+        FilterDecls = copyArray(Decls);
         /* check all the boxes */
         for (var i in Decls)
             document.getElementById("d"+Decls[i]).checked = true;
@@ -321,9 +321,9 @@ function chForm (el, form) {
     }
     else if (form == "none") {
         FilterForms = [];
-	for (var i in Forms) {
+        for (var i in Forms) {
             var id = "f"+printableForms(Forms[i]);
-	    document.getElementById(id).checked = false;
+            document.getElementById(id).checked = false;
         }
     }
     else if (el.checked)

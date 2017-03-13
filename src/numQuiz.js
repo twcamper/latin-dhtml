@@ -16,11 +16,11 @@ function compareAnswer () {
     var tdr = document.getElementById("result");
     if (macronsPrintable(answer.toLowerCase()) == entered.toLowerCase()) {
         msg = "Correct: " + macronsPrintable(answer);
-	tdr.className = "correct";
+        tdr.className = "correct";
     }
     else {
         msg = "Incorrect: " + macronsPrintable(answer);
-	tdr.className = "incorrect";
+        tdr.className = "incorrect";
     }
     tdr.appendChild(document.createTextNode(msg));
     askNumber();
@@ -33,38 +33,38 @@ function translateNumber (n) {
     var trans;
     if (Type == CARDINAL) {
         var onesNames = ["", "_unus", "duo", "tr_es", "quattuor", "qu_inque",
-                         "sex", "septem", "oct_o", "novem"];
+            "sex", "septem", "oct_o", "novem"];
         var teensNames = ["decem", "_undecim", "duodecim", "tr_edecim",
-                          "quattuordecim", "qu_indecim", "s_edecim",
-                          "septendecim"];
+            "quattuordecim", "qu_indecim", "s_edecim",
+            "septendecim"];
         var tensNames = ["", "decem", "v_igint_i", "tr_igint_a",
-                         "quadr_agint_a", "qu_inqu_agint_a", "sex_agint_a",
-                         "septu_agint_a", "oct_ogint_a", "n_on_agint_a"];
+            "quadr_agint_a", "qu_inqu_agint_a", "sex_agint_a",
+            "septu_agint_a", "oct_ogint_a", "n_on_agint_a"];
         var hundredsNames = ["", "centum", "ducent_i", "trecent_i",
-                             "quadringent_i", "qu_ingent_i", "sescent_i",
-                             "septingent_i", "octingent_i", "n_ongent_i"];
-	/* 1-9 */
+            "quadringent_i", "qu_ingent_i", "sescent_i",
+            "septingent_i", "octingent_i", "n_ongent_i"];
+        /* 1-9 */
         if (n < 10)
             trans = onesNames[n];
-	/* 10-17 */
-	else if (n < 18) {
+        /* 10-17 */
+        else if (n < 18) {
             var ones = n%10;
             trans = teensNames[ones];
         }
-	/* 18-97 */
+        /* 18-97 */
         else if (n < 98) {
-	    var tens = Math.floor(n/10);
+            var tens = Math.floor(n/10);
             var tensT = tensNames[tens];
-	    var tensP = tens + 1;
+            var tensP = tens + 1;
             var tensPT = tensNames[tensP];
-	    var ones = n%10;
+            var ones = n%10;
             if (ones == 0) trans = tensT;
             else if (ones == 8) trans = "duod_e" + tensPT;
-	    else if (ones == 9) trans = "_und_e" + tensPT;
-	    else {
-		var onesT = onesNames[ones];
-		trans = tensT + " " + onesT;
-	    }
+            else if (ones == 9) trans = "_und_e" + tensPT;
+            else {
+                var onesT = onesNames[ones];
+                trans = tensT + " " + onesT;
+            }
         }
         /* 98-99 */
         else if (n < 100) {
@@ -73,12 +73,12 @@ function translateNumber (n) {
             else
                 trans = "_und_ecentum";
         }
-	/* 100-997 */
+        /* 100-997 */
         else if (n < 998) {
-	    var hundreds = Math.floor(n/100);
-	    var hundredsT = hundredsNames[hundreds];
-	    var tens = Math.floor((n%100)/10);
-	    var ones = (n%100)%10;
+            var hundreds = Math.floor(n/100);
+            var hundredsT = hundredsNames[hundreds];
+            var tens = Math.floor((n%100)/10);
+            var ones = (n%100)%10;
 
             if ((tens==9) && ((ones==8) || (ones==9))) {
                 var hundredsP = hundreds + 1;
@@ -91,10 +91,10 @@ function translateNumber (n) {
             else
                 if ((tens==0) && (ones==0))
                     trans = hundredsT;
-                else
-                    trans = hundredsT + " " + translateNumber(tens*10+ones);
+            else
+                trans = hundredsT + " " + translateNumber(tens*10+ones);
         }
-/*
+        /*
 milia
 */
         else
@@ -103,44 +103,44 @@ milia
     /* ordinals */
     else {
         var onesNames = ["", "pr_imus", "secundus", "tertius", "qu_artus",
-                         "qu_intus", "sextus", "septimus", "oct_avus",
-                         "n_onus"];
+            "qu_intus", "sextus", "septimus", "oct_avus",
+            "n_onus"];
         var teensNames = ["decimus", "_undecimus", "duodecimus",
-                          "tertius decimus", "qu_artus decimus",
-                          "qu_intus decimus", "sextus decimus",
-                          "septimus decimus"];
+            "tertius decimus", "qu_artus decimus",
+            "qu_intus decimus", "sextus decimus",
+            "septimus decimus"];
         var tensNames = ["", "", "v_ic_esimus", "tr_ic_esimus",
-                         "quadr_ag_esimus", "qu_inqu_ag_esimus",
-                         "sex_ag_esimus", "septu_ag_esimus",
-                         "oct_og_esimus", "n_on_ag_esimus"];
+            "quadr_ag_esimus", "qu_inqu_ag_esimus",
+            "sex_ag_esimus", "septu_ag_esimus",
+            "oct_og_esimus", "n_on_ag_esimus"];
         var hundredsNames = ["", "cent_esimus", "ducent_esimus",
-                             "trecent_esimus", "quadringent_esimus",
-                             "qu_ingent_esimus", "sescent_esimus",
-                             "septingent_esimus", "octingent_esimus",
-                             "n_ongent_esimus"];
+            "trecent_esimus", "quadringent_esimus",
+            "qu_ingent_esimus", "sescent_esimus",
+            "septingent_esimus", "octingent_esimus",
+            "n_ongent_esimus"];
 
-	/* 1st-9th */
+        /* 1st-9th */
         if (n < 10)
             trans = onesNames[n];
-	/* 10th-17th */
-	else if (n < 18) {
+        /* 10th-17th */
+        else if (n < 18) {
             var ones = n%10;
             trans = teensNames[ones];
         }
-	/* 18th-97th */
+        /* 18th-97th */
         else if (n < 98) {
-	    var tens = Math.floor(n/10);
+            var tens = Math.floor(n/10);
             var tensT = tensNames[tens];
-	    var tensP = tens + 1;
+            var tensP = tens + 1;
             var tensPT = tensNames[tensP];
-	    var ones = n%10;
+            var ones = n%10;
             if (ones == 0) trans = tensT;
             else if (ones == 8) trans = "duod_e" + tensPT;
-	    else if (ones == 9) trans = "_und_e" + tensPT;
-	    else {
-		var onesT = onesNames[ones];
-		trans = tensT + " " + onesT;
-	    }
+            else if (ones == 9) trans = "_und_e" + tensPT;
+            else {
+                var onesT = onesNames[ones];
+                trans = tensT + " " + onesT;
+            }
         }
         /* 98th-99th */
         else if (n < 100) {
@@ -149,12 +149,12 @@ milia
             else
                 trans = "_und_ecent_esimus";
         }
-	/* 100th-997th */
+        /* 100th-997th */
         else if (n < 998) {
-	    var hundreds = Math.floor(n/100);
-	    var hundredsT = hundredsNames[hundreds];
-	    var tens = Math.floor((n%100)/10);
-	    var ones = (n%100)%10;
+            var hundreds = Math.floor(n/100);
+            var hundredsT = hundredsNames[hundreds];
+            var tens = Math.floor((n%100)/10);
+            var ones = (n%100)%10;
 
             if ((tens==9) && ((ones==8) || (ones==9))) {
                 var hundredsP = hundreds + 1;
@@ -167,13 +167,13 @@ milia
             else
                 if ((tens==0) && (ones==0))
                     trans = hundredsT;
-                else
-                    trans = hundredsT + " " + translateNumber(tens*10+ones);
+            else
+                trans = hundredsT + " " + translateNumber(tens*10+ones);
         }
-/*
+        /*
         if (n == 1000) trans = "m_ill_esimus";
         if (n == 2000) trans = "bis m_ill_esimus";
-*/
+        */
         else
             trans = "out of range";
     }
@@ -185,7 +185,7 @@ function askNumber () {
     /* ID must be unique, so it must be removed from the last TD
        before it can be included in the new TD.
        Also remove onKeypress action from old INPUT.
-    */
+       */
     Number = From + Math.floor(Math.random() * (To - From))
     Answer = translateNumber(Number);
     var input = document.getElementById("input")
@@ -285,14 +285,14 @@ function init () {
 
 function chType (el) {
     if (el.id == "cardinal") {
-	Type = CARDINAL;
-	el.checked = true;
-	document.getElementById("ordinal").checked = false;
+        Type = CARDINAL;
+        el.checked = true;
+        document.getElementById("ordinal").checked = false;
     }
     else {
-	Type = ORDINAL;
-	el.checked = true;
-	document.getElementById("cardinal").checked = false;
+        Type = ORDINAL;
+        el.checked = true;
+        document.getElementById("cardinal").checked = false;
     }
     return;
 }
@@ -329,5 +329,5 @@ function checkKeypress(event) {
         compareAnswer();
     else
         /* ignore */;
-    return true;
+        return true;
 }
