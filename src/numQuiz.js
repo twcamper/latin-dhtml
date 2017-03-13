@@ -14,7 +14,7 @@ function compareAnswer () {
     var entered = document.getElementById("input").value;
     var msg;
     var tdr = document.getElementById("result");
-    if (macronsComparable(answer.toLowerCase()) == entered.toLowerCase()) {
+    if (macronsPrintable(answer.toLowerCase()) == entered.toLowerCase()) {
         msg = "Correct: " + macronsPrintable(answer);
 	tdr.className = "correct";
     }
