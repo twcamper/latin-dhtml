@@ -1,12 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-  "http://www.w3.org/TR/html4/strict.dtd">
-
+<!DOCTYPE html>
 <html>
 
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Latin Adjective Declension Exercises</title>
-<style type="text/css">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--
+      <base href="http://sarg.ryerson.ca/~cmwilson/r2/">
+    -->
+    <link rel="stylesheet" href="resources/r2.css" type="text/css">
+    <title>Latin Adjective Declension Exercises</title>
+    <style type="text/css">
 BODY { max-width: 50em; }
 .ref { font-weight: bold; padding-right: 0.5em; }
 .targetform { font-style: italic; padding-left: 2em;}
@@ -19,123 +21,122 @@ BODY { max-width: 50em; }
 .control BUTTON { width: 100%; font-size: x-small; }
 TABLE.control TD { padding-right: 0.5em; }
 TR.dump TD { padding-right: 0.5em; }
-</style>
-<script type="text/javascript" src="libRandomTools.js" defer></script>
-<script type="text/javascript" src="libSets.js" defer></script>
-<script type="text/javascript" src="libMacrons.js" defer></script>
-<script type="text/javascript" src="adjList.js" defer></script>
-<script type="text/javascript" src="adjCode.js" defer></script>
-</head>
+    </style>
+    <script type="text/javascript" src="src/libRandomTools.js" defer></script>
+    <script type="text/javascript" src="src/libSets.js" defer></script>
+    <script type="text/javascript" src="src/libMacrons.js" defer></script>
+    <script type="text/javascript" src="src/adjList.js" defer></script>
+    <script type="text/javascript" src="src/adjCode.js" defer></script>
+  </head>
 
-<body id="latin-adj-declensions" onload="init()">
+  <body id="latin-adj-declensions" onload="init()">
 
-<!-- Anyone may copy and/or modify this software without restriction. -->
+    <!-- Anyone may copy and/or modify this software without restriction. -->
 
-<div class="nav">
-<a href="./">MIKE WILSON</a>
-&rarr; <a href="code/code.html">CODE</a>
-&rarr; <a href="code/latin/latin.html">LATIN</a>
-&rarr; LATIN-ADJ-DECLENSIONS
-&mdash; Updated April 15, 2005
-</div>
+    <div class="nav">
+      <a href="./">Gee, thanks MIKE WILSON!</a>
+      &rarr; <a href="languages.html">LATIN</a>
+      &rarr; LATIN-ADJ-DECLENSIONS
+      &mdash; Updated April 15, 2005
+    </div>
 
-<h1>Latin Declension Exercises</h1>
+    <h1>Latin Declension Exercises</h1>
 
-<p>
-Adjective declension exercises from Orberg's Lingua Latina Per Se Illustrata.
-</p>
+    <p>
+    Adjective declension exercises from Orberg's Lingua Latina Per Se Illustrata.
+    </p>
 
-<p class="hidden">
-<span>aeiouyAEIOUY</span>
-<span id="macrons">&#x0101;&#x0113;&#x012B;&#x014D;&#x016B;&#x0233;&#x0100;&#x0112;&#x012A;&#x014C;&#x016A;&#x0232;</span>
-</p>
+    <p class="hidden">
+    <span>aeiouyAEIOUY</span>
+    <span id="macrons">&#x0101;&#x0113;&#x012B;&#x014D;&#x016B;&#x0233;&#x0100;&#x0112;&#x012A;&#x014C;&#x016A;&#x0232;</span>
+    </p>
 
-<h2>Choose which adjectives to include.</h2>
+    <h2>Choose which adjectives to include.</h2>
 
-<table class="control">
-<tr>
-<td>Chapters:</td>
-<td><input type="checkbox" id="cap1" onchange="chCap(this,1)">I</td>
-<td><input type="checkbox" id="cap2" onchange="chCap(this,2)">II</td>
-<td><input type="checkbox" id="cap3" onchange="chCap(this,3)">III</td>
-<td><input type="checkbox" id="cap4" onchange="chCap(this,4)">IV</td>
-<td><input type="checkbox" id="cap5" onchange="chCap(this,5)">V</td>
-<td><input type="checkbox" id="cap6" onchange="chCap(this,6)">VI</td>
-<td><input type="checkbox" id="cap7" onchange="chCap(this,7)">VII</td>
-<td><input type="checkbox" id="cap8" onchange="chCap(this,8)">VIII</td>
-<td><input type="checkbox" id="cap9" onchange="chCap(this,9)">IX</td>
-</tr>
-<tr>
-<td><input type="checkbox" id="cap10" onchange="chCap(this,10)">X</td>
-<td><input type="checkbox" id="cap11" onchange="chCap(this,11)">XI</td>
-<td><input type="checkbox" id="cap12" onchange="chCap(this,12)">XII</td>
-<td><input type="checkbox" id="cap13" onchange="chCap(this,13)">XIII</td>
-<td><input type="checkbox" id="cap14" onchange="chCap(this,14)">XIV</td>
-<td><input type="checkbox" id="cap15" onchange="chCap(this,15)">XV</td>
-<td><input type="checkbox" id="cap16" onchange="chCap(this,16)">XVI</td>
-<td><input type="checkbox" id="cap17" onchange="chCap(this,17)">XVII</td>
-<td><input type="checkbox" id="cap18" onchange="chCap(this,18)">XVIII</td>
-<td><input type="checkbox" id="cap19" onchange="chCap(this,19)">XIX</td>
-</tr>
-<tr>
-<td><input type="checkbox" id="cap20" onchange="chCap(this,20)">XX</td>
-<td><input type="checkbox" id="cap21" onchange="chCap(this,21)">XXI</td>
-<td><input type="checkbox" id="cap22" onchange="chCap(this,22)">XXII</td>
-<td><input type="checkbox" id="cap23" onchange="chCap(this,23)">XXIII</td>
-<td><input type="checkbox" id="cap24" onchange="chCap(this,24)">XXIV</td>
-<td><input type="checkbox" id="cap25" onchange="chCap(this,25)">XXV</td>
-<td><input type="checkbox" id="cap26" onchange="chCap(this,26)">XXVI</td>
-<td><input type="checkbox" id="cap27" onchange="chCap(this,27)">XXVII</td>
-<td><input type="checkbox" id="cap28" onchange="chCap(this,28)">XXVIII</td>
-<td><input type="checkbox" id="cap29" onchange="chCap(this,29)">XXIX</td>
-</tr>
-<tr>
-<td><input type="checkbox" id="cap30" onchange="chCap(this,30)">XXX</td>
-<td><input type="checkbox" id="cap31" onchange="chCap(this,31)">XXXI</td>
-<td><input type="checkbox" id="cap32" onchange="chCap(this,32)">XXXII</td>
-<td><input type="checkbox" id="cap33" onchange="chCap(this,33)">XXXIII</td>
-<td><input type="checkbox" id="cap34" onchange="chCap(this,34)">XXXIV</td>
-<td><input type="checkbox" id="cap35" onchange="chCap(this,35)">XXXV</td>
-<td></td>
-<td><button type="button" onclick="chCap(this,'all')" >All</button></td>
-<td><button type="button" onclick="chCap(this,'none')">None</button></td>
-</tr>
-<tr>
-<td>Forms:</td>
-<td><input type="checkbox" id="fnom" onchange="chForm(this,'nom')">NOM</td>
-<td><input type="checkbox" id="facc" onchange="chForm(this,'acc')">ACC</td>
-<td><input type="checkbox" id="fgen" onchange="chForm(this,'gen')">GEN</td>
-<td><input type="checkbox" id="fdat" onchange="chForm(this,'dat')">DAT</td>
-<td><input type="checkbox" id="fabl" onchange="chForm(this,'abl')">ABL</td>
-<td></td>
-<td><button type="button" onclick="chForm(this,'all')" >All</button></td>
-<td><button type="button" onclick="chForm(this,'none')">None</button></td>
-</tr>
-<tr>
-<td>Decls.:</td>
-<td><input type="checkbox" id="d1" onchange="chDecl(this,1)">I/II</td>
-<td><input type="checkbox" id="d3" onchange="chDecl(this,3)">III</td>
-<td>Gender:</td>
-<td><input type="checkbox" id="gm" onchange="chGender(this,0)">M</td>
-<td><input type="checkbox" id="gf" onchange="chGender(this,1)">F</td>
-<td><input type="checkbox" id="gn" onchange="chGender(this,2)">N</td>
-<td>Quantity:</td>
-<td><input type="checkbox" id="sg" onchange="chQuan(this,0)">SG</td>
-<td><input type="checkbox" id="pl" onchange="chQuan(this,1)">PL</td>
-</tr>
-</table>
+    <table class="control">
+      <tr>
+        <td>Chapters:</td>
+        <td><input type="checkbox" id="cap1" onchange="chCap(this,1)">I</td>
+        <td><input type="checkbox" id="cap2" onchange="chCap(this,2)">II</td>
+        <td><input type="checkbox" id="cap3" onchange="chCap(this,3)">III</td>
+        <td><input type="checkbox" id="cap4" onchange="chCap(this,4)">IV</td>
+        <td><input type="checkbox" id="cap5" onchange="chCap(this,5)">V</td>
+        <td><input type="checkbox" id="cap6" onchange="chCap(this,6)">VI</td>
+        <td><input type="checkbox" id="cap7" onchange="chCap(this,7)">VII</td>
+        <td><input type="checkbox" id="cap8" onchange="chCap(this,8)">VIII</td>
+        <td><input type="checkbox" id="cap9" onchange="chCap(this,9)">IX</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" id="cap10" onchange="chCap(this,10)">X</td>
+        <td><input type="checkbox" id="cap11" onchange="chCap(this,11)">XI</td>
+        <td><input type="checkbox" id="cap12" onchange="chCap(this,12)">XII</td>
+        <td><input type="checkbox" id="cap13" onchange="chCap(this,13)">XIII</td>
+        <td><input type="checkbox" id="cap14" onchange="chCap(this,14)">XIV</td>
+        <td><input type="checkbox" id="cap15" onchange="chCap(this,15)">XV</td>
+        <td><input type="checkbox" id="cap16" onchange="chCap(this,16)">XVI</td>
+        <td><input type="checkbox" id="cap17" onchange="chCap(this,17)">XVII</td>
+        <td><input type="checkbox" id="cap18" onchange="chCap(this,18)">XVIII</td>
+        <td><input type="checkbox" id="cap19" onchange="chCap(this,19)">XIX</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" id="cap20" onchange="chCap(this,20)">XX</td>
+        <td><input type="checkbox" id="cap21" onchange="chCap(this,21)">XXI</td>
+        <td><input type="checkbox" id="cap22" onchange="chCap(this,22)">XXII</td>
+        <td><input type="checkbox" id="cap23" onchange="chCap(this,23)">XXIII</td>
+        <td><input type="checkbox" id="cap24" onchange="chCap(this,24)">XXIV</td>
+        <td><input type="checkbox" id="cap25" onchange="chCap(this,25)">XXV</td>
+        <td><input type="checkbox" id="cap26" onchange="chCap(this,26)">XXVI</td>
+        <td><input type="checkbox" id="cap27" onchange="chCap(this,27)">XXVII</td>
+        <td><input type="checkbox" id="cap28" onchange="chCap(this,28)">XXVIII</td>
+        <td><input type="checkbox" id="cap29" onchange="chCap(this,29)">XXIX</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" id="cap30" onchange="chCap(this,30)">XXX</td>
+        <td><input type="checkbox" id="cap31" onchange="chCap(this,31)">XXXI</td>
+        <td><input type="checkbox" id="cap32" onchange="chCap(this,32)">XXXII</td>
+        <td><input type="checkbox" id="cap33" onchange="chCap(this,33)">XXXIII</td>
+        <td><input type="checkbox" id="cap34" onchange="chCap(this,34)">XXXIV</td>
+        <td><input type="checkbox" id="cap35" onchange="chCap(this,35)">XXXV</td>
+        <td></td>
+        <td><button type="button" onclick="chCap(this,'all')" >All</button></td>
+        <td><button type="button" onclick="chCap(this,'none')">None</button></td>
+      </tr>
+      <tr>
+        <td>Forms:</td>
+        <td><input type="checkbox" id="fnom" onchange="chForm(this,'nom')">NOM</td>
+        <td><input type="checkbox" id="facc" onchange="chForm(this,'acc')">ACC</td>
+        <td><input type="checkbox" id="fgen" onchange="chForm(this,'gen')">GEN</td>
+        <td><input type="checkbox" id="fdat" onchange="chForm(this,'dat')">DAT</td>
+        <td><input type="checkbox" id="fabl" onchange="chForm(this,'abl')">ABL</td>
+        <td></td>
+        <td><button type="button" onclick="chForm(this,'all')" >All</button></td>
+        <td><button type="button" onclick="chForm(this,'none')">None</button></td>
+      </tr>
+      <tr>
+        <td>Decls.:</td>
+        <td><input type="checkbox" id="d1" onchange="chDecl(this,1)">I/II</td>
+        <td><input type="checkbox" id="d3" onchange="chDecl(this,3)">III</td>
+        <td>Gender:</td>
+        <td><input type="checkbox" id="gm" onchange="chGender(this,0)">M</td>
+        <td><input type="checkbox" id="gf" onchange="chGender(this,1)">F</td>
+        <td><input type="checkbox" id="gn" onchange="chGender(this,2)">N</td>
+        <td>Quantity:</td>
+        <td><input type="checkbox" id="sg" onchange="chQuan(this,0)">SG</td>
+        <td><input type="checkbox" id="pl" onchange="chQuan(this,1)">PL</td>
+      </tr>
+    </table>
 
-<p>
-<span class="buttons">
-<button type="button" onclick="guessWord()">Guess Words</button>
-<button type="button" onclick="dumpWords()">(dump)</button>
-</span>
-</p>
+    <p>
+    <span class="buttons">
+      <button type="button" onclick="guessWord()">Guess Words</button>
+      <button type="button" onclick="dumpWords()">(dump)</button>
+    </span>
+    </p>
 
-<!-- Per HTML spec, tables can't be empty -->
-<table id="table">
-<tr class="hidden"><td></td></tr>
-</table>
+    <!-- Per HTML spec, tables can't be empty -->
+    <table id="table">
+      <tr class="hidden"><td></td></tr>
+    </table>
 
-</body>
+  </body>
 </html>
