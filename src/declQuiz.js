@@ -178,6 +178,13 @@ function askWord() {
     }
 }
 
+function promptShow() {
+    var button = document.getElementById("dumpButton");
+    if (button) {
+        button.focus();
+    }
+}
+
 function promptContinue() {
     var button = document.getElementById("continueButton");
     if (QuizBegun && button) {
@@ -317,7 +324,11 @@ function setRowMembers(tr, word, quantity) {
 
 function notifyFilters() {
     markFilter();
-    promptContinue();
+    if (document.getElementById("quizTable")) {
+        promptContinue();
+    } else if (document.getElementById("listTable")) {
+        promptShow();
+    }
 }
 
 /*
