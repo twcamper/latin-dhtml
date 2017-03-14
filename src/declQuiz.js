@@ -195,16 +195,27 @@ function alreadyCorrect(ws) {
     return false;
 }
 
-function deleteAllTableRows (id) {
-    var table = document.getElementById(id);
-    while (table.rows.length !== 0)
-        table.deleteRow(-1);
+function newTable(id) {
+    var div = document.getElementById("main");
+    var table = document.createElement("table");
+    var tbody = document.createElement("tbody");
+    table.id = id;
+    table.appendChild(tbody);
+    div.appendChild(table);
+    return table;
+}
+
+function tbody(tableID) {
+    var table = document.getElementById(tableID);
+    if (table) {
+        return table;
+    }
+    return newTable(tableID).firstChild;
 }
 
 function addNewRow (w, quantity, targetCase) {
     /* Show the sg nominative, sg genitive ending, and gender of the word. */
-    var table = document.getElementById("quizTable");
-    var tr = table.insertRow(-1);
+    var tr = tbody("quizTable").insertRow(-1);
     var th = tr.insertCell(-1);    /* This isn't really a TH */
     th.className = "ref";
     var txt = macronize(wordNom(w)) + " " + macronize(wordGenEnd(w)) + " " + wordGender(w);
@@ -290,7 +301,7 @@ function setHeader(tr, headingTxt) {
 }
 
 function newRow() {
-    var tr = document.getElementById("quizTable").insertRow(-1);
+    var tr = tbody("listTable").insertRow(-1);
     tr.className = "dump";
     return tr;
 }
@@ -460,8 +471,16 @@ function markFilter() {
     Filters.dirty = true;
 }
 
+function deleteTable(id) {
+    var table = document.getElementById(id);
+    if (table) {
+        table.parentNode.removeChild(table);
+    }
+}
+
 function newQuiz() {
-    deleteAllTableRows("quizTable");
+    deleteTable("listTable");
+    deleteTable("quizTable");
     CorrectlyAnswered = [];
     markFilter();
     askWord();
@@ -469,26 +488,27 @@ function newQuiz() {
 }
 
 function askMore() {
+    deleteTable("listTable");
     askWord();
     QuizBegun = true;
 }
 
 function dumpWords() {
     //console.log("caps: "+Filters.caps+" decls:"+Filters.decls+" cases:"+Filters.cases+" genders:"+Filters.genders+" quantity:"+Filters.quantity);
-    deleteAllTableRows("quizTable");
+    deleteTable("listTable");
+    deleteTable("quizTable");
     Words = wordFilter(OrigWords, Filters, function (list, w) { list.push(w); });
-    if (Filters.quantity == [])
+    if (Filters.quantity == []) {
         return;
-    else {
-        var sg = setMember(Filters.quantity, SG);
-        var pl = setMember(Filters.quantity, PL);
-        for (var i in Words) {
-            var word = Words[i];
-            if (pluralisTantum(word))
-                dumpRow(word, false, pl);
-            else
-                dumpRow(word, sg, pl);
-        }
+    }
+    var sg = setMember(Filters.quantity, SG);
+    var pl = setMember(Filters.quantity, PL);
+    for (var i in Words) {
+        var word = Words[i];
+        if (pluralisTantum(word))
+            dumpRow(word, false, pl);
+        else
+            dumpRow(word, sg, pl);
     }
 }
 
