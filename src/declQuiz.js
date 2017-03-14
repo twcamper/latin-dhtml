@@ -92,6 +92,9 @@ function fillDeclensionEndingsArray() {
 function wordFilter (a, filters, append) {
     /* remove any words not of the selected chapters and declensions */
     var b = [];
+    if (filterEmpty()) {
+        return b;
+    }
     for (var i=0 ; i<a.length ; i++) {
         var word = a[i];
         var chapter = wordCap(word);
@@ -163,6 +166,7 @@ function setResponseText(resultNode, msg) {
 function askWord() {
     if (Filters.dirty) {
         applyFilter();
+        displayWordCount(WordStructs.length);
     }
     if (WordStructs.length === 0) {
         promptContinue();
@@ -329,6 +333,14 @@ function notifyFilters() {
     } else if (document.getElementById("listTable")) {
         promptShow();
     }
+}
+
+function filterEmpty() {
+    return Filters.quantity.length === 0 ||
+        Filters.genders.length === 0 ||
+        Filters.cases.length === 0 ||
+        Filters.decls.length === 0 ||
+        Filters.caps.length === 0;
 }
 
 /*
@@ -509,7 +521,9 @@ function dumpWords() {
     deleteTable("listTable");
     deleteTable("quizTable");
     Words = wordFilter(OrigWords, Filters, function (list, w) { list.push(w); });
-    if (Filters.quantity == []) {
+    displayWordCount(Words.length);
+
+    if (Words.length === 0) {
         return;
     }
     var sg = setMember(Filters.quantity, SG);
@@ -521,6 +535,19 @@ function dumpWords() {
         else
             dumpRow(word, sg, pl);
     }
+}
+
+
+function displayWordCount(total) {
+    var span = document.getElementById("wordCount");
+    if (span) {
+        span.removeChild(span.childNodes[0]);
+    } else {
+        span = document.createElement("span");
+        span.id = "wordCount";
+        document.getElementById("buttonRow").appendChild(span);
+    }
+    span.appendChild(document.createTextNode(total + " words"));
 }
 
 function checkKeypress(event) {
