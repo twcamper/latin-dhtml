@@ -41,7 +41,7 @@ var AllQuantities = [SG, PL];
 var DeclensionEndings = [];
 var CorrectlyAnswered = [];
 var QuizBegun = false;
-
+var QuizRowCounter = 0;
 var ti, tf, t=0;    /* for occasional profiling */
 
 
@@ -225,27 +225,42 @@ function tbody(tableID) {
 }
 
 function addNewRow (w, quantity, targetCase) {
-    /* Show the sg nominative, sg genitive ending, and gender of the word. */
     var tr = tbody("quizTable").insertRow(-1);
-    var th = tr.insertCell(-1);    /* This isn't really a TH */
-    th.className = "ref";
-    var txt = macronize(wordNom(w)) + " " + macronize(wordGenEnd(w)) + " " + wordGender(w);
-    if (pluralisTantum(w))
-        txt = txt + " pl";
-    th.appendChild(document.createTextNode(txt));
-    /* the target word form and sg/pl. */
-    var tdtf = tr.insertCell(-1);
-    tdtf.className = "targetform";
-    if (quantity == PL)
-        tdtf.className += " plural";
-    tdtf.appendChild(document.createTextNode(targetCase + " " + quantity + ":"));
-    /* the INPUT field */
+    setNewCounter(tr.insertCell(-1));
+    setNewEntry(tr.insertCell(-1), w);
+    setNewCaseQuantityLabel(tr.insertCell(-1), targetCase, quantity);
     setNewInput(tr.insertCell(-1));
-    /* The result field, where we write "Correct", etc. */
     setNewResult(tr.insertCell(-1), macronize(wordDecline(w, quantity, targetCase)));
+
     if (window.scrollBy) {    /* scroll down -- not standard */
         window.scrollBy(0,100);
     }
+}
+
+function setNewCounter(td) {
+    var oldCounter = document.getElementById("quizRowCounter");
+    if (oldCounter) {
+        oldCounter.removeAttribute("id");
+        oldCounter.removeChild(oldCounter.childNodes[0]);
+    }
+    td.id = "quizRowCounter";
+    td.appendChild(document.createTextNode(++QuizRowCounter));
+}
+
+function setNewEntry(td, w) {
+    /* Show the sg nominative, sg genitive ending, and gender of the word. */
+    td.className = "ref";
+    var txt = macronize(wordNom(w)) + " " + macronize(wordGenEnd(w)) + " " + wordGender(w);
+    if (pluralisTantum(w))
+        txt = txt + " pl";
+    td.appendChild(document.createTextNode(txt));
+}
+
+function setNewCaseQuantityLabel(td, targetCase, quantity) {
+    td.className = "targetform";
+    if (quantity == PL)
+        td.className += " plural";
+    td.appendChild(document.createTextNode(targetCase + " " + quantity + ":"));
 }
 
 function setNewInput(td) {
@@ -506,8 +521,9 @@ function newQuiz() {
     deleteTable("quizTable");
     CorrectlyAnswered = [];
     markFilter();
-    askWord();
     QuizBegun = true;
+    QuizRowCounter = 0;
+    askWord();
 }
 
 function askMore() {
