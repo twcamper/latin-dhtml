@@ -1,6 +1,0 @@
-* Latin Quizzing Software (using dynamic html)
-
-** Declensions of Nouns
-** Conjugations of Verbs
-** Numbers
-** Adjectives (unfinished)
