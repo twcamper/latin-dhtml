@@ -36,7 +36,7 @@ var ImplementedChapters = [];
 var AllDecls = [1,2,3,4,5,0];
 var AllCases = ["nom", "acc", "gen", "dat", "abl"];
 var AllGenders = [M, F, N];
-var AllQuantities = [SG, PL];
+var AllNumbers = [SG, PL];
 /* DeclensionEndings[declension type][sg/pl][nom/.../abl] */
 var DeclensionEndings = [];
 var CorrectlyAnswered = [];
@@ -104,7 +104,7 @@ function wordFilter (a, filters, append) {
             if (setMember(filters.decls, declensionNumber)) {
                 var genders = gender.split("");
                 if (setIntersect(filters.genders, genders))
-                    if (!(pluralisTantum(word) && !setMember(filters.quantity, PL))) {
+                    if (!(pluralisTantum(word) && !setMember(filters.number, PL))) {
                         append(b, word, filters);
                     }
             }
@@ -114,8 +114,8 @@ function wordFilter (a, filters, append) {
 
 function pushWordStruct(list, w, filters) {
     for (var caseIndex in filters.cases) {
-        for (var quantIndex in filters.quantity) {
-            var ws = {"w" : w, "q" : filters.quantity[quantIndex], "c" : filters.cases[caseIndex]};
+        for (var numberIndex in filters.number) {
+            var ws = {"w" : w, "n" : filters.number[numberIndex], "c" : filters.cases[caseIndex]};
             if (!alreadyCorrect(ws)) {
                 list.push(ws);
             }
@@ -139,7 +139,7 @@ function compareAnswer (input) {
     var resultCell = input.parentNode.nextSibling;
     var answer = resultCell.id;
     var msg;
-    var wordStruct = {"w" : Word, "q" : TargetSP, "c" : TargetCase};
+    var wordStruct = {"w" : Word, "n" : TargetSP, "c" : TargetCase};
     if (answer.toLowerCase() == entered.toLowerCase()) {
         msg = "Correct: " + answer;
         resultCell.className = "result correct";
@@ -173,7 +173,7 @@ function askWord() {
     } else {
         var wordStruct = WordStructs.pop();
         Word = wordStruct.w;
-        TargetSP = wordStruct.q;
+        TargetSP = wordStruct.n;
         TargetCase = wordStruct.c;
         if (pluralisTantum(Word)) {
             TargetSP = PL;
@@ -199,7 +199,7 @@ function promptContinue() {
 function alreadyCorrect(ws) {
     for (var i in CorrectlyAnswered) {
         ca = CorrectlyAnswered[i];
-        if (ws.w[0] === ca.w[0] && ws.q === ca.q && ws.c === ca.c) {
+        if (ws.w[0] === ca.w[0] && ws.n === ca.n && ws.c === ca.c) {
             return true;
         }
     }
@@ -224,13 +224,13 @@ function tbody(tableID) {
     return newTable(tableID).firstChild;
 }
 
-function addNewRow (w, quantity, targetCase) {
+function addNewRow (w, number, targetCase) {
     var tr = tbody("quizTable").insertRow(-1);
     setNewCounter(tr.insertCell(-1));
     setNewEntry(tr.insertCell(-1), w);
-    setNewCaseQuantityLabel(tr.insertCell(-1), targetCase, quantity);
+    setNewCaseNumberLabel(tr.insertCell(-1), targetCase, number);
     setNewInput(tr.insertCell(-1));
-    setNewResult(tr.insertCell(-1), macronize(wordDecline(w, quantity, targetCase)));
+    setNewResult(tr.insertCell(-1), macronize(wordDecline(w, number, targetCase)));
 
     if (window.scrollBy) {    /* scroll down -- not standard */
         window.scrollBy(0,100);
@@ -256,11 +256,11 @@ function setNewEntry(td, w) {
     td.appendChild(document.createTextNode(txt));
 }
 
-function setNewCaseQuantityLabel(td, targetCase, quantity) {
+function setNewCaseNumberLabel(td, targetCase, number) {
     td.className = "targetform";
-    if (quantity == PL)
+    if (number == PL)
         td.className += " plural";
-    td.appendChild(document.createTextNode(targetCase + " " + quantity + ":"));
+    td.appendChild(document.createTextNode(targetCase + " " + number + ":"));
 }
 
 function setNewInput(td) {
@@ -332,11 +332,11 @@ function newRow() {
     return tr;
 }
 
-function setRowMembers(tr, word, quantity) {
+function setRowMembers(tr, word, number) {
     for (var i in AllCases)
         if (setMember(Filters.cases, AllCases[i])) {
             var td = tr.insertCell(-1);
-            var inflectedWord = macronize(wordDecline(word, quantity, AllCases[i]));
+            var inflectedWord = macronize(wordDecline(word, number, AllCases[i]));
             td.appendChild(document.createTextNode(inflectedWord));
         }
 }
@@ -351,7 +351,7 @@ function notifyFilters() {
 }
 
 function filterEmpty() {
-    return Filters.quantity.length === 0 ||
+    return Filters.number.length === 0 ||
         Filters.genders.length === 0 ||
         Filters.cases.length === 0 ||
         Filters.decls.length === 0 ||
@@ -373,7 +373,7 @@ function init() {
     Filters.decls = copyArray(AllDecls);
     Filters.cases = copyArray(AllCases);
     Filters.genders = copyArray(AllGenders);
-    Filters.quantity = copyArray(AllQuantities);
+    Filters.number = copyArray(AllNumbers);
     Filters.dirty = true;
 
     var i = 0;
@@ -396,8 +396,8 @@ function init() {
         document.getElementById("f"+AllCases[i]).checked = false;
     for (i in AllGenders)
         document.getElementById("g"+AllGenders[i]).checked = false;
-    for (i in AllQuantities)
-        document.getElementById(AllQuantities[i]).checked = false;
+    for (i in AllNumbers)
+        document.getElementById(AllNumbers[i]).checked = false;
 
     for (i in Filters.caps)
         document.getElementById("cap"+Filters.caps[i]).checked = true;
@@ -407,8 +407,8 @@ function init() {
         document.getElementById("f"+Filters.cases[i]).checked = true;
     for (i in Filters.genders)
         document.getElementById("g"+Filters.genders[i]).checked = true;
-    for (i in Filters.quantity)
-        document.getElementById(Filters.quantity[i]).checked = true;
+    for (i in Filters.number)
+        document.getElementById(Filters.number[i]).checked = true;
 }
 
 function chCap (el, cap) {
@@ -493,9 +493,9 @@ function chGender (el, gender) {
 
 function chCount (el, count) {
     if (el.checked)
-        setAdd(Filters.quantity, count);
+        setAdd(Filters.number, count);
     else
-        setRemove(Filters.quantity, count);
+        setRemove(Filters.number, count);
     notifyFilters();
     return true;
 }
@@ -533,7 +533,7 @@ function askMore() {
 }
 
 function dumpWords() {
-    //console.log("caps: "+Filters.caps+" decls:"+Filters.decls+" cases:"+Filters.cases+" genders:"+Filters.genders+" quantity:"+Filters.quantity);
+    //console.log("caps: "+Filters.caps+" decls:"+Filters.decls+" cases:"+Filters.cases+" genders:"+Filters.genders+" number:"+Filters.number);
     deleteTable("listTable");
     deleteTable("quizTable");
     Words = wordFilter(OrigWords, Filters, function (list, w) { list.push(w); });
@@ -542,8 +542,8 @@ function dumpWords() {
     if (Words.length === 0) {
         return;
     }
-    var sg = setMember(Filters.quantity, SG);
-    var pl = setMember(Filters.quantity, PL);
+    var sg = setMember(Filters.number, SG);
+    var pl = setMember(Filters.number, PL);
     for (var i in Words) {
         var word = Words[i];
         if (pluralisTantum(word))

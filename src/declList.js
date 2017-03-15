@@ -33,7 +33,7 @@ var M="m", F="f", N="n", MF="mf";
 var SP="sp", SG="sg", PL="pl";
 
 /*
-  nom|genend|gender|decl type|decl opt|effective base|quantity|chapter
+  nom|genend|gender|decl type|decl opt|effective base|number|chapter
   DECL TYPEs are indices into the DeclensionEndings table.
   Words are declined by looking up endings in that table.
   Some words like "frons frontis" buck that trend with a stubborn nominative.

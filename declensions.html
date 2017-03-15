@@ -38,7 +38,7 @@ TR.dump TD { padding-right: 0.5em; }
       <a href="./">Thank you, MIKE WILSON!</a>
       &rarr; <a href="languages.html">LANGUAGES</a>
       &rarr; LATIN-DECLENSIONS
-      &mdash; Updated March&nbsp;12, 2017
+      &mdash; Updated March&nbsp;15, 2017
     </div>
 
     <h1>Latin Declension Exercises</h1>
@@ -103,15 +103,15 @@ TR.dump TD { padding-right: 0.5em; }
         <td><button type="button" onclick="chCap(this,'none')">None</button></td>
       </tr>
       <tr>
-        <td>Decl.:</td>
-        <td><input type="checkbox" id="d1" onchange="chDecl(this,1)">I</td>
-        <td><input type="checkbox" id="d2" onchange="chDecl(this,2)">II</td>
-        <td><input type="checkbox" id="d3" onchange="chDecl(this,3)">III</td>
-        <td><input type="checkbox" id="d4" onchange="chDecl(this,4)">IV</td>
-        <td><input type="checkbox" id="d5" onchange="chDecl(this,5)">V</td>
-        <td><input type="checkbox" id="d0" onchange="chDecl(this,0)">IN</td>
-        <td><button type="button" onclick="chDecl(this,'all')" >All</button></td>
-        <td><button type="button" onclick="chDecl(this,'none')">None</button></td>
+        <td>Number:</td>
+        <td><input type="checkbox" id="sg" onchange="chCount(this,'sg')">SG</td>
+        <td><input type="checkbox" id="pl" onchange="chCount(this,'pl')">PL</td>
+      </tr>
+      <tr>
+        <td>Gender:</td>
+        <td><input type="checkbox" id="gm" onchange="chGender(this,'m')">M</td>
+        <td><input type="checkbox" id="gf" onchange="chGender(this,'f')">F</td>
+        <td><input type="checkbox" id="gn" onchange="chGender(this,'n')">N</td>
       </tr>
       <tr>
         <td>Case:</td>
@@ -125,15 +125,15 @@ TR.dump TD { padding-right: 0.5em; }
         <td><button type="button" onclick="chCase(this,'none')">None</button></td>
       </tr>
       <tr>
-        <td>Gender:</td>
-        <td><input type="checkbox" id="gm" onchange="chGender(this,'m')">M</td>
-        <td><input type="checkbox" id="gf" onchange="chGender(this,'f')">F</td>
-        <td><input type="checkbox" id="gn" onchange="chGender(this,'n')">N</td>
-      </tr>
-      <tr>
-        <td>Quantity:</td>
-        <td><input type="checkbox" id="sg" onchange="chCount(this,'sg')">SG</td>
-        <td><input type="checkbox" id="pl" onchange="chCount(this,'pl')">PL</td>
+        <td>Decl.:</td>
+        <td><input type="checkbox" id="d1" onchange="chDecl(this,1)">I</td>
+        <td><input type="checkbox" id="d2" onchange="chDecl(this,2)">II</td>
+        <td><input type="checkbox" id="d3" onchange="chDecl(this,3)">III</td>
+        <td><input type="checkbox" id="d4" onchange="chDecl(this,4)">IV</td>
+        <td><input type="checkbox" id="d5" onchange="chDecl(this,5)">V</td>
+        <td><input type="checkbox" id="d0" onchange="chDecl(this,0)">IN</td>
+        <td><button type="button" onclick="chDecl(this,'all')" >All</button></td>
+        <td><button type="button" onclick="chDecl(this,'none')">None</button></td>
       </tr>
     </table>
 
