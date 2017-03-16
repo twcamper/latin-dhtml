@@ -1,4 +1,4 @@
-# Latin Quizzing Software (using dynamic html)
+# [Latin Quizzing Software](https://twcamper.github.io/latin-dhtml/index.html)
 
 Gratefully forked from https://github.com/cmikewilson/latin-dhtml
 
