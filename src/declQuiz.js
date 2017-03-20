@@ -27,7 +27,6 @@ IMPORT from random: *
 IMPORT from macrons: macrons_init, macronize, macronsComparable
 */
 
-var Word, TargetSP, TargetCase;
 var Filters = [];
 var WordStructs, Words = [];
 var AllChapters = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
@@ -115,8 +114,12 @@ function wordFilter (a, filters, append) {
 function pushWordStruct(list, w, filters) {
     for (var caseIndex in filters.cases) {
         for (var numberIndex in filters.number) {
-            var ws = {"w" : w, "n" : filters.number[numberIndex], "c" : filters.cases[caseIndex]};
-            if (!alreadyCorrect(ws)) {
+            if (pluralisTantum(w) && filters.number[numberIndex] === "sg") {
+                continue;
+            }
+            var ws = {"w" : w, "n" : filters.number[numberIndex], "c" : filters.cases[caseIndex] };
+            ws.inflected = macronize(wordDecline(ws.w, ws.n, ws.c))
+            if (!alreadyCorrect(ws.inflected)) {
                 list.push(ws);
             }
         }
@@ -139,17 +142,15 @@ function compareAnswer (input) {
     var resultCell = input.parentNode.nextSibling;
     var answer = resultCell.id;
     var msg;
-    var wordStruct = {"w" : Word, "n" : TargetSP, "c" : TargetCase};
     if (answer.toLowerCase() == entered.toLowerCase()) {
         msg = "Correct: " + answer;
         resultCell.className = "result correct";
-        CorrectlyAnswered.push(wordStruct);
+        CorrectlyAnswered.push(answer);
         input.removeAttribute("onKeypress");
     }
     else {
         msg = "Incorrect: " + answer;
         resultCell.className = "result incorrect";
-        WordStructs.unshift(wordStruct);
     }
     setResponseText(resultCell, msg);
 }
@@ -171,14 +172,7 @@ function askWord() {
     if (WordStructs.length === 0) {
         promptContinue();
     } else {
-        var wordStruct = WordStructs.pop();
-        Word = wordStruct.w;
-        TargetSP = wordStruct.n;
-        TargetCase = wordStruct.c;
-        if (pluralisTantum(Word)) {
-            TargetSP = PL;
-        }
-        addNewRow(Word, TargetSP, TargetCase);
+        addNewRow(WordStructs.pop());
     }
 }
 
@@ -196,10 +190,9 @@ function promptContinue() {
     }
 }
 
-function alreadyCorrect(ws) {
+function alreadyCorrect(inflected) {
     for (var i in CorrectlyAnswered) {
-        ca = CorrectlyAnswered[i];
-        if (ws.w[0] === ca.w[0] && ws.n === ca.n && ws.c === ca.c) {
+        if (CorrectlyAnswered[i] === inflected) {
             return true;
         }
     }
@@ -224,13 +217,13 @@ function tbody(tableID) {
     return newTable(tableID).firstChild;
 }
 
-function addNewRow (w, number, targetCase) {
+function addNewRow(wordStruct) {
     var tr = tbody("quizTable").insertRow(-1);
     setNewCounter(tr.insertCell(-1));
-    setNewEntry(tr.insertCell(-1), w);
-    setNewCaseNumberLabel(tr.insertCell(-1), targetCase, number);
+    setNewEntry(tr.insertCell(-1), wordStruct.w);
+    setNewCaseNumberLabel(tr.insertCell(-1), wordStruct.c, wordStruct.n);
     setNewInput(tr.insertCell(-1));
-    setNewResult(tr.insertCell(-1), macronize(wordDecline(w, number, targetCase)));
+    setNewResult(tr.insertCell(-1), wordStruct.inflected);
 
     if (window.scrollBy) {    /* scroll down -- not standard */
         window.scrollBy(0,100);
