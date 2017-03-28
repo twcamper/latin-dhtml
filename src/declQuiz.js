@@ -143,14 +143,14 @@ function compareAnswer (input) {
     var answer = resultCell.id;
     var msg;
     if (answer.toLowerCase() == entered.toLowerCase()) {
-        msg = "Correct: " + answer;
-        resultCell.className = "result correct";
+        msg = answer + " ✓";
+        resultCell.className = "correct";
         CorrectlyAnswered.push(answer);
         input.removeAttribute("onKeypress");
     }
     else {
-        msg = "Incorrect: " + answer;
-        resultCell.className = "result incorrect";
+        msg = answer + " !";
+        resultCell.className = "incorrect";
     }
     setResponseText(resultCell, msg);
 }
