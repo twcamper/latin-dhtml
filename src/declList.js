@@ -310,7 +310,7 @@ var OrigWords = [
 
 ["calceus", 	 "-_i", M, "2m", 0, "calce",      SP, 14],
 ["gallus",       "-_i", M, "2m", 0, "gall",       SP, 14],
-["parent_es",	 "-um", M, "3b", 0, "parent",     SP, 14],
+["paren_ens", "-entis", MF, "3b", 0, "parent",    SP, 14],
 ["participium",  "-_i", N, "2n", 0, "participi",  SP, 14],
 ["r_egula", 	 "-ae", F, "1a", 0, "r_egul",	  SP, 14],
 ["r_es",         "re_i", F, "5b", 0, "r",   	  SP, 14],
