@@ -27,15 +27,16 @@ TR.dump TD { padding-right: 0.5em; }
     <script type="text/javascript" src="src/libRandomTools.js" defer></script>
     <script type="text/javascript" src="src/libSets.js" defer></script>
     <script type="text/javascript" src="src/libMacrons.js" defer></script>
+    <script type="text/javascript" src="src/kalendarium.js" defer></script>
     <script type="text/javascript" src="src/declQuiz.js" defer></script>
   </head>
 
-  <body id="latin-declensions" onload="init()">
+  <body id="latin-declensions" onload="init();setRomanDate('hodie')">
 
     <!-- Anyone may copy and/or modify this software without restriction. -->
 
     <div class="nav">
-      <a href="./">Thank you, MIKE WILSON!</a>
+      <a href="http://funarg.nfshost.com/r2/">Thank you, MIKE WILSON</a>
       &rarr; <a href="index.html">HOME</a>
       &rarr; LATIN-DECLENSIONS
       &mdash; Updated March&nbsp;15, 2017
@@ -147,5 +148,6 @@ TR.dump TD { padding-right: 0.5em; }
 
 
     <div id="main"></div>
+    <footer id="hodie" class="kalendarium">diēs:</footer>
   </body>
 </html>
