@@ -36,6 +36,14 @@ DIV.nav
 	background-color: #CEF;
 	padding: 1mm;
 	}
+.kalendarium
+{
+	font-size: normal;
+	background-color: #CEF;
+  margin-top: 1em;
+  padding: 0.5em;
+  text-align: center;
+}
 DIV.center-blue
 	{
 	 margin-top: 5mm;
