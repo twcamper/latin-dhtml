@@ -21,11 +21,12 @@ H1	{ font-size: x-large; }
 H2	{
 	font-size: large;
 	margin-top: 5%;
-	background-color: #BDF;
+	background-color: #CEF;
 	padding: 0.6%;
 	}
 H3	{ font-size: medium; background-color: #CEF; padding: 0.4%; }
 H2,H3	{ padding-left: 1.5%; }
+caption { padding-bottom: 0.4em }
 
 DIV.space { margin-bottom: 1em; }
 DIV.space A { margin-right: 1em; }
